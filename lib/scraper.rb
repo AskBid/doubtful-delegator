@@ -10,9 +10,10 @@ class AdaPool
   include HTTParty
   base_uri 'api.adapools.org'
 
-  def timeline(which = :friends, options = {})
-    options.merge!({ api_key: '4cf2ba49ee3b4ce9dc74073d5' })
-    self.class.get("/v0/pools", options)
+  def request
+    api_key = '4cf2ba49ee3b4ce9dc74073d5'
+    options = { :basic_auth => { :username => api_key } }
+    self.class.post("/v0/pools", options)
   end
 end
 
