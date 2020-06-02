@@ -1,21 +1,29 @@
 require 'nokogiri'
 require 'watir'
 
-# html = open("https://pooltool.io/pool/c0285a4fe690d3aa9c0709f2f365e13f4ba83161e9219c8a10446aaa189e81d0/history")
-browser = Watir::Browser.new :chrome, headless: true
-# browser = Watir::Browser.new
+class ScraperAdapool
 
-# browser.goto 'https://pooltool.io/'
-browser.goto 'https://itn.adapools.org/dashboard/full'
-# Watir::Wait.until { browser.div(class: ['modal-modal-dialog', 'modal-lg']).present? }
-# Watir::Wait.until {browser.div(class: ['modal-modal-dialog', 'modal-lg']).visible? }
-# browser.send_keys(:escape)
-# browser.button(text: 'X').when_present.click
-# browser.select_list(name: 'DataTables_Table_0_length').option(value: '1000')
-# puts browser.select_list(name: 'DataTables_Table_0_length').selected_options.map(&:text)
+  def initialize(url = 'https://itn.adapools.org/dashboard/full')
+    browser = Watir::Browser.new :chrome, headless: true
+    browser.goto(url)
+    @doc = Nokogiri::HTML.parse(browser.html)
+    @table = @doc.css('.table.datatable')
+  end
 
-doc = Nokogiri::HTML.parse(browser.html)
-doc = doc.css('.table.datatable')
+  def col_values
+    @table.css('thead').css('th').text
+  end
 
+  def table_headers_changed?
+    !(col_values == "# Name Pool ID PoolSize BPELastEpoch Staker'sreward LiveStake Tax(%) Tax(fix/max) TaxAvg ROAAvg")
+  end
 
-File.write("log1.html", doc)
+  def pool_rows
+    @table.css('tbody').css('tr')
+  end
+
+  def values_from_row(row)
+    row.css('td')[0].text
+  end
+
+end
