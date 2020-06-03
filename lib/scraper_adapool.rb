@@ -12,26 +12,50 @@ class ScraperAdapool
     @table = @doc.css('.table.datatable')
   end
 
-  def hash(row)
-    populate_hash_with_row(row)
+  def get_data
+    pool_rows.map { |row|
+      puts row.css('td').text
+      populate_hash_with_row(row)
+    }
   end
+
+  def table_headers_changed?
+    known_headers = "# Name Pool ID PoolSize BPELastEpoch Staker'sreward LiveStake Tax(%) Tax(fix/max) TaxAvg ROAAvg"
+    current_headers = col_values
+    puts "known headers  : #{known_headers}"
+    puts "current headers: #{current_headers}"
+    !(current_headers == known_headers)
+  end
+
+  def save_raw_page(location = '.')
+    File.write("#{location}/#{Time.now.strftime("%Y-%m-%d_%H-%M")}.html", @doc)
+    puts "raw page written as: #{location}/#{Time.now.strftime("%Y-%m-%d_%H-%M")}.html" 
+  end
+
+  def save_data_json(file_path = './dd-data.json')
+    #a file must already exist
+    #make and empty hash file if not ('{}')
+    file = File.read(file_path)
+    existing_data = JSON.parse(file)
+    existing_data["#{Time.now.strftime("%Y-%m-%d_%H-%M")}"] = get_data
+
+    File.write("#{file_path}", JSON.pretty_generate(existing_data))
+    puts "file written as: #{file_path}"
+  end
+
+
+  private
 
   def col_values
     @table.css('thead').css('th').text
   end
-
-  def table_headers_changed?
-    !(col_values == "# Name Pool ID PoolSize BPELastEpoch Staker'sreward LiveStake Tax(%) Tax(fix/max) TaxAvg ROAAvg")
-  end
-
-  # private
 
   def pool_rows
     @table.css('tbody').css('tr')
   end
 
   def populate_hash_with_row(row)
-    @hash = {
+    {
       ticker: ticker_from_row(row),
       name: name_from_row(row),
       address: address_from_row(row),
@@ -46,14 +70,22 @@ class ScraperAdapool
 
   def ticker_from_row(row)
     str = row.css('td')[2].text
-    str.split(']')[0].gsub('  [','')
+    if str.include?(']')
+      str.split(']')[0].gsub('  [','')
+    else
+      'n/a'
+    end
   end
 
   def name_from_row(row)
     str = row.css('td')[2].text
-    str = str.split(']')[1]
-    str = str.scan(/^(.*).$/).join
-    str.scan(/^.(.*)$/).join
+    if str.include?(']')
+      str = str.split(']')[1]
+      str = str.scan(/^(.*).$/).join
+      str.scan(/^.(.*)$/).join
+    else
+      'n/a'
+    end
   end
 
   def address_from_row(row)
