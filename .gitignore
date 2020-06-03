@@ -1,3 +1,4 @@
-config/concerns/api-key
-lib/scraper.rb
-scraper.rb
+run_html.rb
+run_json.rb
+dd-data.json
+/*.html

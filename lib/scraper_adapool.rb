@@ -23,7 +23,7 @@ class ScraperAdapool
     known_headers = "# Name Pool ID PoolSize BPELastEpoch Staker'sreward LiveStake Tax(%) Tax(fix/max) TaxAvg ROAAvg"
     current_headers = col_values
     puts "known headers  : #{known_headers}"
-    puts "current headers: #{current_headers}"
+    puts "current headers: #{current_headers} "
     !(current_headers == known_headers)
   end
 
@@ -32,7 +32,7 @@ class ScraperAdapool
     puts "raw page written as: #{location}/#{Time.now.strftime("%Y-%m-%d_%H-%M")}.html" 
   end
 
-  def save_data_json(file_path = './dd-data.json')
+  def save_json_data(file_path = './dd-data.json')
     #a file must already exist
     #make and empty hash file if not ('{}')
     file = File.read(file_path)

@@ -12,6 +12,7 @@ gem 'pry'
 gem 'bcrypt'
 gem 'tux'
 gem 'httparty'
+gem 'watir'
 
 group :test do
   gem 'rspec'
