@@ -4,7 +4,6 @@ class CreateDelegations < ActiveRecord::Migration
     	t.string :type
     	t.integer :amount
     	t.integer :user_id
-    	t.integer :pool_id
     	t.integer :pool_epoch_id
 
       t.timestamps null: false

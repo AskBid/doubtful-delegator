@@ -17,7 +17,6 @@ ActiveRecord::Schema.define(version: 20200604120746) do
     t.string   "type"
     t.integer  "amount"
     t.integer  "user_id"
-    t.integer  "pool_id"
     t.integer  "pool_epoch_id"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
@@ -31,6 +30,7 @@ ActiveRecord::Schema.define(version: 20200604120746) do
     t.integer  "epoch"
     t.integer  "blocks"
     t.float    "tax"
+    t.integer  "pool_id"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
   end

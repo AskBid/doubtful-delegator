@@ -8,6 +8,7 @@ class CreatePoolEpoches < ActiveRecord::Migration
     	t.integer :epoch
     	t.integer :blocks
     	t.float   :tax
+      t.integer :pool_id
 
       t.timestamps null: false
     end
