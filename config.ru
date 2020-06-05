@@ -7,3 +7,4 @@ end
 run ApplicationController
 use DelegationsController
 use PoolEpochsController
+use UserController

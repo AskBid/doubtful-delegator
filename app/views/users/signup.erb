@@ -1,0 +1,22 @@
+<h1>Sign Up</h1>
+<p>[ <%= User.all.size %> users registered ]</p>
+<br>
+<% if flash.has?(:message) %>
+  <p class='flash'><%= flash[:message] %> Do you want to <a href='/login'>Log In</a> ?</p>
+<% end %>
+<form action='/signup' method='post'>
+	<input type='text' name='username' id='username'>
+	<label for='username'>Username</label>
+	<br>
+  <input type='text' name='email' id='email'>
+	<label for='email'>eMail</label>
+  <br>
+  <input type='text' name='password' id='password'>
+  <label for='password'>Password</label>
+  <br>
+  <input type='text' name='balance' id='balance'>
+  <label for='balance'>Your Balance</label>
+  <br>
+  <br>
+  <input type='submit' value=' Create User '>
+</form>
