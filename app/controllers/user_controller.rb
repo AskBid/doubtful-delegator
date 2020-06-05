@@ -12,7 +12,7 @@ class UserController < ApplicationController
 			flash[:message] = "The username already exist"
 			redirect '/signup'
 		end
-		user = User.new(params) if 
+		user = User.new(params) if
 		if user.save
 			session[:user_id] = user.id
 			redirect "/users/#{user.slug}"
@@ -23,22 +23,9 @@ class UserController < ApplicationController
 
 	get '/users/:slug' do
 		@user = User.find_by_slug(params[:slug])
-		@epochs = @user.pool_epochs.where("epoch >= ?", 5)
-
+		@delegations = @user.delegations.map {|d| d.pool_epoch.epoch == current_epoch}
+		
 		erb :'users/show'
-	end
-
-
-	post '/signup' do
-		user = User.new(params)
-		# binding.pry
-		if user.save 
-			# binding.pry
-			session[:user_id] = user.id
-			redirect('/tweets')
-		else
-			redirect('/signup')
-		end
 	end
 
 	get '/login' do
@@ -46,18 +33,20 @@ class UserController < ApplicationController
 		if !logged_in?
 			erb :'users/login'
 		else
-			redirect('/tweets')
+			user = User.find(session[:user_id])
+			redirect("/users/#{user.slug}")
 		end
 	end
 
 	post '/login' do
 		@user = User.find_by(username: params[:username])
+
 		if @user && @user.authenticate(params[:password])
 			session[:user_id] = @user.id
 			# binding.pry
-			redirect :'/tweets'
+			redirect :"/users/#{@user.slug}"
 		else
-			# binding.pry
+			flash[:message] = "You tried to Log In with a User that doesn't exist"
 			redirect :'/signup'
 		end
 	end
@@ -66,12 +55,6 @@ class UserController < ApplicationController
 		session.destroy
 		# binding.pry
 		redirect :'/login'
-	end
-
-	get "/users/:slug" do
-		@user = User.find_by_slug(params[:slug])
-		@tweets = @user.tweets
-    erb :'users/show'
 	end
 
 

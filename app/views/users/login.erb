@@ -1,0 +1,16 @@
+<h1>Log In</h1>
+<p>[ <%= User.all.size %> users registered ]</p>
+<br>
+<% if flash.has?(:message) %>
+  <p class='flash'><%= flash[:message] %> ...</p>
+<% end %>
+<form action='/login' method='post'>
+	<input type='text' name='username' id='username'>
+	<label for='username'>Username</label>
+	<br>
+  <input type='text' name='password' id='password'>
+  <label for='password'>Password</label>
+  <br>
+  <br>
+  <input type='submit' value=' Log In '>
+</form>

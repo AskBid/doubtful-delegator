@@ -25,6 +25,10 @@ class ApplicationController < Sinatra::Base
       User.find_by(id: session[:user_id])
     end
 
+    def current_epoch
+      PoolEpoch.maximum('epoch')
+    end
+
     # # create an authorization helper for edit/delete
     # def authorized_to_edit?(post)
     #   post.user == current_user
