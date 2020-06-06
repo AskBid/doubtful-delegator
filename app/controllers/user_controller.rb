@@ -27,11 +27,11 @@ class UserController < ApplicationController
 		@user = User.find_by_slug(params[:slug])
 		if session[:user_id] == @user.id
 			actual_delegations = @user.delegations.select do |d| 
-				d.pool_epoch.epoch == @epoch && d.type != 'wished'
+				d.pool_epoch.epoch == @epoch && d.kind != 'wished'
 			end
 
 			wished_delegations = @user.delegations.select do |d| 
-				d.pool_epoch.epoch == @epoch && d.type == 'wished'
+				d.pool_epoch.epoch == @epoch && d.kind == 'wished'
 			end
 
 			@actual_pools = actual_delegations.map {|d| d.pool_epoch.pool.id}
@@ -54,11 +54,11 @@ class UserController < ApplicationController
 		@user = User.find_by_slug(params[:slug])
 
 		@actual_delegations = @user.delegations.select do |d| 
-			d.pool_epoch.epoch == @epoch && d.type != 'wished'
+			d.pool_epoch.epoch == @epoch && d.kind != 'wished'
 		end
 
 		@wished_delegations = @user.delegations.select do |d| 
-			d.pool_epoch.epoch == @epoch && d.type == 'wished'
+			d.pool_epoch.epoch == @epoch && d.kind == 'wished'
 		end
 
 		erb :'users/show'

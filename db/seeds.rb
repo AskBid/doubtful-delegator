@@ -74,6 +74,27 @@
 @u2.pool_epochs = [@e1p2, @e2p2]
 @u3.pool_epochs = [@e2p1, @e2p3]
 
+
+@u1.delegations[0].amount = 3000
+@u1.delegations[1].amount = 9990
+
+@u2.delegations[0].amount = 3000
+@u2.delegations[1].amount = 9990
+
+@u3.delegations[0].amount = 3000
+@u3.delegations[1].amount = 9990
+@u3.delegations[1].kind = 'wished'
+
+@u1.delegations[0].save
+@u1.delegations[1].save
+
+@u2.delegations[0].save
+@u2.delegations[1].save
+
+@u3.delegations[0].save
+@u3.delegations[1].save
+@u3.delegations[1].save
+
 @u1.save
 @u2.save
 @u3.save

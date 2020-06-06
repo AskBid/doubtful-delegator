@@ -39,6 +39,15 @@ p.attributes{
   padding: 0px;
 }
 
+p.result{  
+  font-size: 12px;
+  margin-bottom: 0px;
+  margin-top: 0px;
+  text-align: right;
+  line-height: 1.5em;
+  padding: 0px 8px 0px 0px;
+}
+
 p.flash {
   color: red;
 }

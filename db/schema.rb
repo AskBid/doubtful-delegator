@@ -14,7 +14,7 @@
 ActiveRecord::Schema.define(version: 20200604120746) do
 
   create_table "delegations", force: :cascade do |t|
-    t.string   "type"
+    t.string   "kind"
     t.integer  "amount"
     t.integer  "user_id"
     t.integer  "pool_epoch_id"
