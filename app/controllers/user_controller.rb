@@ -21,15 +21,44 @@ class UserController < ApplicationController
 		end
 	end
 
-	get '/users/:slug' do
+	get '/users/:slug/edit' do
+		@epoch = current_epoch
 		@user = User.find_by_slug(params[:slug])
-		@delegations = @user.delegations.map {|d| d.pool_epoch.epoch == current_epoch}
-		
+		if logged_in? && session[:user_id] == @user.id
+			actual_delegations = @user.delegations.select do |d| 
+				d.pool_epoch.epoch == @epoch && d.type != 'wished'
+			end
+
+			wished_delegations = @user.delegations.select do |d| 
+				d.pool_epoch.epoch == @epoch && d.type == 'wished'
+			end
+
+			@actual_pools = actual_delegations.map {|d| d.pool_epoch.pool}
+			@wished_pools = wished_delegations.map {|d| d.pool_epoch.pool}
+
+			@pools = Pool.all
+
+			erb :'users/edit'	
+		else
+			redirect 'users/logout'
+		end
+	end
+
+	get '/users/:slug' do
+		@epoch = current_epoch
+		@user = User.find_by_slug(params[:slug])
+		# binding.pry
+		@delegations = @user.delegations.select do |d| 
+			d.pool_epoch.epoch == @epoch && d.type != 'wished'
+		end
+		@wished_delegations = @user.delegations.select do |d| 
+			d.pool_epoch.epoch == @epoch && d.type == 'wished'
+		end
+
 		erb :'users/show'
 	end
 
 	get '/login' do
-		# binding.pry
 		if !logged_in?
 			erb :'users/login'
 		else
@@ -53,9 +82,7 @@ class UserController < ApplicationController
 
 	get '/logout' do
 		session.destroy
-		# binding.pry
 		redirect :'/login'
 	end
-
 
 end

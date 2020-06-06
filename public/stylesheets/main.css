@@ -1,15 +1,37 @@
+div.pool_label {
+  display: inline-block;
+  border: solid;
+  width: 150px;
+  height: 100px;
+  vertical-align:top;
+  white-space: nowrap;
+  padding: 2px;
+}
+
+p.name{
+  font-size: 13px;
+  margin-bottom: 0px;
+}
+
+p.ticker{
+  font-size: 15px;
+  margin-bottom: 0px;
+}
 
 @media screen {
   /* --- Reset Styles --- */
+
   * {
     list-style: none;
     margin: 0;
     padding: 0;
   }
 
-  p .flash {
+  p.flash {
     color: red;
   }
+
+
 
   html, body {
     height: 100%;
@@ -53,7 +75,8 @@
   }
 
   p {
-    margin-bottom: 18px;
+    font-size: 14px;
+    margin-bottom: 10px;
   }
 
   .main {
@@ -86,7 +109,6 @@
     margin-top: 20px;
     padding-top: 20px;
   }
-
 
 }
 

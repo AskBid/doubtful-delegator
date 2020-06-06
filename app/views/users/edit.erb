@@ -1,0 +1,11 @@
+<h1> <%= @user.username %> </h1> 
+<h3> select you delegations: </h3>
+
+<form action='' method=''>
+	<% @pools.each do |p| %>
+		<div class='pool_label'> 
+			<p class='ticker'>[<%= p.ticker %>]</p> 
+			<p class='name'><%= p.name %></p> 
+		</div>
+	<% end %>
+</form>

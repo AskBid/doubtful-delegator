@@ -1,0 +1,28 @@
+<h1> User: <%= @user.username %> </h1>
+<br>
+
+<h2> Actual Delegations: </h2> 
+<ul>
+
+	<% @delegations.each do |d| %>
+			<h2> <%= d.pool_epoch.pool.ticker %> </h2> 
+
+					<h3> <%= d.amount %> </h3>
+
+	<% end %>
+</ul>
+
+<br>
+<h2> Wished Delegations: </h2> 
+<ul>
+	<% @wished_delegations.each do |d| %>
+		<li> 
+			<h2> <%= d.pool_epoch.pool.ticker %> </h2> 
+			<ul>
+				<li>
+					<h3> <%= d.amount %> </h3>
+				</li>
+			</ul>
+		</li>
+	<% end %>
+</ul>
