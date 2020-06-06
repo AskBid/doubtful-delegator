@@ -33,8 +33,10 @@ class UserController < ApplicationController
 				d.pool_epoch.epoch == @epoch && d.type == 'wished'
 			end
 
-			@actual_pools = actual_delegations.map {|d| d.pool_epoch.pool}
-			@wished_pools = wished_delegations.map {|d| d.pool_epoch.pool}
+			@actual_pools = actual_delegations.map {|d| d.pool_epoch.pool.id}
+			@wished_pools = wished_delegations.map {|d| d.pool_epoch.pool.id}
+
+			@pool_epochs = PoolEpoch.where('epoch = ?', @epoch)
 
 			@pools = Pool.all
 

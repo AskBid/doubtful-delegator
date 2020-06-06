@@ -2,16 +2,43 @@ div.pool_label {
   display: inline-block;
   border: solid;
   width: 150px;
-  height: 100px;
+  /*height: 150px;*/
   vertical-align:top;
   white-space: nowrap;
   padding: 2px;
+}
+
+div.select {
+  border-color: blue;
+}
+
+label {
+  font-size: 10px;
+  padding: 2px 0px 2px 8px ;
 }
 
 p.name{
   font-size: 13px;
   margin-bottom: 0px;
 }
+
+div.check {
+  width: 100%;
+  background-color: #fffeee;
+  padding-bottom: 5px;
+  text-align: center;
+}
+
+p.attributes{  
+  font-size: 12px;
+  margin-bottom: 0px;
+  margin-top: 0px;
+  text-align: right;
+  line-height: 1.5em;
+  float: right;
+  padding: 0px;
+}
+
 
 p.ticker{
   font-size: 15px;
