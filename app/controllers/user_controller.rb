@@ -71,10 +71,16 @@ class UserController < ApplicationController
 		delegations_to_destroy = @user.delegations.select{|d| d.pool_epoch.epoch == @epoch}
 		ids_to_destroy = delegations_to_destroy.map{|d| d.id }
 		Delegation.destroy(ids_to_destroy)
-		# @user.delegations.where().destroy_all
 		# "delegated_pools"=>{"1"=>"delegated", "2"=>"wished", "3"=>"delegated"}
-		params[:delegated_pools].each { |pool_id, d_kind|
-
+		@delegations = params[:delegated_pools].map { |pool_id, d_kind|
+				pool = Pool.find(pool_id.to_i)
+				pool_epoch = pool.pool_epochs.where('epoch = ?', @epoch).first
+		
+				@user.pool_epochs.push(pool_epoch)
+				delegation = @user.delegations.where('pool_epoch_id = ?', pool_epoch.id).first
+				
+				delegation.kind = d_kind
+				delegation
 		}
 
 		erb :'delegations/edit'

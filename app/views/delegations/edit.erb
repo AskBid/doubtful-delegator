@@ -1,1 +1,3 @@
-<h1>Insert the form to edit an instance of your model here.</h1>
+<% @delegations.each do |d| %>
+	<%= d.pool_epoch.pool.ticker %>
+<% end %>
