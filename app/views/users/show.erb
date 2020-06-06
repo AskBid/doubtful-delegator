@@ -2,27 +2,57 @@
 <br>
 
 <h2> Actual Delegations: </h2> 
-<ul>
 
-	<% @delegations.each do |d| %>
-			<h2> <%= d.pool_epoch.pool.ticker %> </h2> 
+<% @actual_delegations.each do |d| %>
+	<div class='pool_label'>
+		<p class='ticker'>[
+			<a href="https://pooltool.io/pool/<%= d.pool_epoch.pool.address %>/history">
+				<%= d.pool_epoch.pool.ticker %>
+			</a>]</p>
+		<p class='name'><%= d.pool_epoch.pool.name %></p>
 
-					<h3> <%= d.amount %> </h3>
+		<div class='check'>
+			<% binding.pry %>
+			<label for='delegated'>Delegated Amount:</label>
+			<p class='attributes flash' id='delegated'>
+				<%= d.amount %> ADA
+			</p>
+			<label for='profit'>Profit:</label>
+			<p class='attributes flash' id='profit'> 
+				<%= (d.pool_epoch.staker_reward.to_f/d.pool_epoch.total_stake.to_f) * d.amount %> ADA
+			</p>
+		</div>
 
-	<% end %>
-</ul>
+		<label for='blocks'>Blocks:</label>
+		<p class='attributes' id='blocks'> 
+			<%= d.pool_epoch.blocks %> </p>
+		<br>
+
+		<label for='staker_reward'>Staker Reward:</label>
+		<p class='attributes' id='staker_reward'> 
+			<%= d.pool_epoch.staker_reward %> </p>
+		<br>
+
+		<label for='total_stake'>TOT Stake:</label>
+		<p class='attributes' id='total_stake'> 
+			<%= d.pool_epoch.total_stake %> </p>
+		<br>
+
+		<label for='ROS'>ROS:</label>
+		<p class='attributes' id='ROS'> 
+			<%= ((d.pool_epoch.staker_reward.to_f/d.pool_epoch.total_stake.to_f)*1000).to_s[0..4] %> </p>
+		<br>
+
+	</div>
+<% end %>
+
 
 <br>
 <h2> Wished Delegations: </h2> 
-<ul>
-	<% @wished_delegations.each do |d| %>
-		<li> 
-			<h2> <%= d.pool_epoch.pool.ticker %> </h2> 
-			<ul>
-				<li>
-					<h3> <%= d.amount %> </h3>
-				</li>
-			</ul>
-		</li>
-	<% end %>
-</ul>
+
+<% @wished_delegations.each do |d| %>
+		<h2> <%= d.pool_epoch.pool.ticker %> </h2> 
+
+				<h3> <%= d.amount %> </h3>
+
+<% end %>

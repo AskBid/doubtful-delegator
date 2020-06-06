@@ -1,5 +1,9 @@
+<% if flash.has?(:message) %>
+  <p class='flash'><%= flash[:message] %> Do you want to <a href='/logout'>Log Out</a> ?</p>
+<% end %>
+
 <h1> <%= @user.username %> </h1>
-<h3> select you delegations: </h3>
+<h3> Select your delegations: </h3>
 
 <form action='/users/<%= @user.slug %>' method='post'>
 	<input id="hidden" type="hidden" name="_method" value="patch">
@@ -8,7 +12,9 @@
 	<br>
 	<% @pools.each do |p| %>
 		<div class='pool_label <%= 'select' if @actual_pools.include?(p.id) %>'>
-			<p class='ticker'>[<%= p.ticker %>]</p>
+			<p class='ticker'>[
+				<a href="https://pooltool.io/pool/<%= p.address %>/history"><%= p.ticker %></a>
+			]</p>
 			<p class='name'><%= p.name %></p>
 		
 		<div class='check'>

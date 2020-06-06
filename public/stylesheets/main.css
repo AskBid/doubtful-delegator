@@ -39,6 +39,10 @@ p.attributes{
   padding: 0px;
 }
 
+p.flash {
+  color: red;
+}
+
 
 p.ticker{
   font-size: 15px;
@@ -53,12 +57,6 @@ p.ticker{
     margin: 0;
     padding: 0;
   }
-
-  p.flash {
-    color: red;
-  }
-
-
 
   html, body {
     height: 100%;

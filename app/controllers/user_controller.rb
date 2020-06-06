@@ -22,9 +22,10 @@ class UserController < ApplicationController
 	end
 
 	get '/users/:slug/edit' do
+		redirect '/login' if !logged_in?
 		@epoch = current_epoch
 		@user = User.find_by_slug(params[:slug])
-		if logged_in? && session[:user_id] == @user.id
+		if session[:user_id] == @user.id
 			actual_delegations = @user.delegations.select do |d| 
 				d.pool_epoch.epoch == @epoch && d.type != 'wished'
 			end
@@ -40,22 +41,31 @@ class UserController < ApplicationController
 
 			@pools = Pool.all
 
-			erb :'users/edit'	
+			erb :'users/edit'
 		else
-			redirect 'users/logout'
+			flash[:message] = "You cannot edit a User that isn't yours."
+			user = User.find(session[:user_id])
+			redirect "/users/#{user.slug}/edit"
 		end
 	end
 
 	get '/users/:slug' do
 		@epoch = current_epoch
 		@user = User.find_by_slug(params[:slug])
-		# binding.pry
-		@delegations = @user.delegations.select do |d| 
+
+		@actual_delegations = @user.delegations.select do |d| 
 			d.pool_epoch.epoch == @epoch && d.type != 'wished'
 		end
+
 		@wished_delegations = @user.delegations.select do |d| 
 			d.pool_epoch.epoch == @epoch && d.type == 'wished'
 		end
+
+		erb :'users/show'
+	end
+
+	patch '/users/:slug' do
+		raise "#{params}"
 
 		erb :'users/show'
 	end
