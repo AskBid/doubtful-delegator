@@ -2,8 +2,12 @@
   <p class='flash'><%= flash[:message] %> Do you want to <a href='/logout'>Log Out</a> ?</p>
 <% end %>
 
-<h1> <%= @user.username %> </h1>
-<h3> Select your delegations: </h3>
+User:
+<h1><b> <%= @user.username %> </b> </h1>
+ADA balance:
+<h2> <%= @user.balance %> </h2>
+
+<h3> select your delegations: </h3>
 
 <form action='/users/<%= @user.slug %>' method='post'>
 	<input id="hidden" type="hidden" name="_method" value="patch">
@@ -19,15 +23,15 @@
 		
 		<div class='check'>
 			<label for='<%= p.id %>_delegate'>Delegate</label>
-			<input type='checkbox' name='pool'
-				value='<%= p.id %>'
+			<input type='radio' name='delegated_pools[<%= p.id %>]'
+				value='delegated'
 				id='<%= p.id %>_delegate'
 				<%= 'checked' if @actual_pools.include?(p.id) %>
 			>
 
 			<label for='<%= p.id %>_delegate'>Wished</label>
-			<input type='checkbox' name='pool' 
-				value='<%= p.id %>' 
+			<input type='radio' name='delegated_pools[<%= p.id %>]' 
+				value='wished' 
 				id='<%= p.id %>_wished' 
 				<%= 'checked' if @wished_pools.include?(p.id) %>
 			> 

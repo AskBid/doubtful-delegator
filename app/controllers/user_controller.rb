@@ -65,16 +65,26 @@ class UserController < ApplicationController
 	end
 
 	patch '/users/:slug' do
-		raise "#{params}"
+		# raise "#{params}"
+		@epoch = current_epoch
+		@user = current_user
+		delegations_to_destroy = @user.delegations.select{|d| d.pool_epoch.epoch == @epoch}
+		ids_to_destroy = delegations_to_destroy.map{|d| d.id }
+		Delegation.destroy(ids_to_destroy)
+		# @user.delegations.where().destroy_all
+		# "delegated_pools"=>{"1"=>"delegated", "2"=>"wished", "3"=>"delegated"}
+		params[:delegated_pools].each { |pool_id, d_kind|
 
-		erb :'users/show'
+		}
+
+		erb :'delegations/edit'
 	end
 
 	get '/login' do
 		if !logged_in?
 			erb :'users/login'
 		else
-			user = User.find(session[:user_id])
+			user = current_user
 			redirect("/users/#{user.slug}")
 		end
 	end
