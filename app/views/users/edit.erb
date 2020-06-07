@@ -9,7 +9,7 @@ ADA balance:
 
 <h3> select your delegations: </h3>
 
-<form action='/users/<%= @user.slug %>/delegations' method='post'>
+<form action='/users/<%= @user.slug %>/edit/delegations' method='post'>
 	<input id="hidden" type="hidden" name="_method" value="patch">
 
 	<input type="submit" name="EDIT" value='EDIT!' style='display: block; width:150px; height: 90px'>

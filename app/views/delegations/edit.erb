@@ -30,9 +30,9 @@ ADA balance:
 				<label for='delegated' style='color: #cc2222; '>ADA delegated:</label>
 				<!-- hidden input wasn't working because of the patch hidden input
 				used a <b> tag instead -->
-				<b type='none' name='delegations[][<%= d.id %>]' value='<%= d.id %>' id='different'></b>
+				<b type='none' name='delegations[<%= d.id %>]' value='<%= d.id %>' id='different'></b>
 				<input type="range" 
-					name='delegations[][<%= d.id %>][amount]' 
+					name='delegations[<%= d.id %>][amount]' 
 					min="0" max="1" step='0.1'
 					value="<%= 1/delegation_type.size %>" 
 					class="slider" 
