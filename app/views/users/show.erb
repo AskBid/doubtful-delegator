@@ -29,7 +29,11 @@ ADA balance:
 				<div class='check'>
 					<label for='delegated' style='color: #cc2222'>ADA delegated:</label>
 					<p class='result flash' id='delegated'>
+						<% if d.amount %>
 						<% stake = d.amount * @user.balance %>
+						<% else %>
+						<% stake = 0 %>
+						<% end %>
 						<%= stake.to_i %> ADA
 					</p>
 					<label for='profit' style='color: #cc2222'>Profit:</label>
