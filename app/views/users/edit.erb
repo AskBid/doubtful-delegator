@@ -1,0 +1,28 @@
+<h1>EDIT User Account</h1>
+<br>
+<% if flash.has?(:message) %>
+  <p class='flash'><%= flash[:message] %></p>
+<% end %>
+<form action='/users/<%= @user.slug %>' method='post'>
+  <input id="hidden" type="hidden" name="_method" value="patch">
+
+	<input type='text' name='user[username]' id='username' value='<%= @user.username %>'>
+	<label for='username'>Username</label>
+	<br>
+  <input type='text' name='user[email]' id='email' value='<%= @user.email %>'>
+	<label for='email'>eMail</label>
+  <br>
+  <input type='text' name='user[password]' id='password' value='<%= @user.password %>'>
+  <label for='password'>Password</label>
+  <br>
+  <input type='text' name='user[balance]' id='balance' value='<%= @user.balance %>'>
+  <label for='balance'>Your Balance</label>
+  <br>
+  <br>
+  <input type='submit' value=' EDIT/DONE! '>
+</form>
+
+<form action='/users/<%= @user.slug %>' method='post'>
+  <input id="hidden" type="hidden" name="_method" value="delete">
+  <input type='submit' value=' DELETE User '>
+</form>

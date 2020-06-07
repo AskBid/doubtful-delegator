@@ -8,7 +8,7 @@ class UserController < ApplicationController
 
 	post '/signup' do
 		# raise "#{params}"
-		if User.find_by(username: 'sergio')
+		if User.find_by(username: params[:username])
 			flash[:message] = "The username already exist"
 			redirect '/signup'
 		end
@@ -34,6 +34,44 @@ class UserController < ApplicationController
 		end
 
 		erb :'users/show'
+	end
+
+	patch '/users/:slug' do
+		@epoch = current_epoch
+		@user = User.find_by_slug(params[:slug])
+		@user.update(params[:user])
+
+		@actual_delegations = @user.delegations.select do |d| 
+			d.pool_epoch.epoch == @epoch && d.kind != 'wished'
+		end
+
+		@wished_delegations = @user.delegations.select do |d| 
+			d.pool_epoch.epoch == @epoch && d.kind == 'wished'
+		end
+
+		erb :'users/show'
+	end
+
+	delete '/users/:slug' do
+		redirect '/login' if !logged_in?
+		@user = User.find_by_slug(params[:slug])
+		if authorized_to_edit?(@user)
+			session.destroy
+			@user.destroy
+		end
+		redirect '/'
+	end
+
+	get '/users/:slug/edit' do
+		redirect '/login' if !logged_in?
+		@user = User.find_by_slug(params[:slug])
+		if authorized_to_edit?(@user)
+			erb :'users/edit'
+		else
+			flash[:message] = "You tried to edit a User that is not you"
+			redirect :"/users/#{current_user.slug}/edit"
+		end
+		
 	end
 
 	get '/login' do

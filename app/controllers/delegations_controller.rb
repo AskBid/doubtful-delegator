@@ -55,7 +55,7 @@ class DelegationsController < ApplicationController
   patch '/delegations/users/:slug' do
     @epoch = current_epoch
     @user = User.find_by_slug(params[:slug])
-    binding.pry
+
     normalise_delegations(params[:delegations_actual]).each{|delegation_id, _params|
       Delegation.find(delegation_id.to_i).update(_params)
     } if params[:delegations_actual]
