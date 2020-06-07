@@ -7,5 +7,5 @@ use Rack::MethodOverride
 
 run ApplicationController
 use DelegationsController
-use PoolEpochsController
+use PoolController
 use UserController

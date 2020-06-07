@@ -5,13 +5,12 @@ Epoch:
 <h3><%= @epoch %> </h3>
 User:
 <h1><b> <%= @user.username %> </b> </h1>
-ADA balance:
-<h2> <%= @user.balance %> </h2>
+balance:
+<h2> <%= @user.balance %> ADA</h2>
 
 <h3> select your delegations: </h3>
 
-<form action='/users/<%= @user.slug %>/edit/delegations' method='post'>
-	<input id="hidden" type="hidden" name="_method" value="patch">
+<form action='/delegations/users/<%= @user.slug %>' method='post'>
 
 	<input type="submit" name="EDIT" value='EDIT!' style='display: block; width:150px; height: 90px'>
 	<br>
