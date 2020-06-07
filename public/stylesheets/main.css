@@ -20,6 +20,13 @@ label {
 p.name{
   font-size: 13px;
   margin-bottom: 0px;
+  text-align: center;
+}
+
+#balance {
+  background-color: #fffeee;
+  font-size: 18px;
+  text-align: right;
 }
 
 div.check {
@@ -27,6 +34,7 @@ div.check {
   background-color: #fffeee;
   padding-bottom: 5px;
   text-align: center;
+  white-space: normal;
 }
 
 p.attributes{  

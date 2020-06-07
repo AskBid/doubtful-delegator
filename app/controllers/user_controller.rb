@@ -64,7 +64,7 @@ class UserController < ApplicationController
 		erb :'users/show'
 	end
 
-	patch '/users/:slug' do
+	patch '/users/:slug/delegations' do
 		# raise "#{params}"
 		@epoch = current_epoch
 		@user = current_user
@@ -72,18 +72,24 @@ class UserController < ApplicationController
 		ids_to_destroy = delegations_to_destroy.map{|d| d.id }
 		Delegation.destroy(ids_to_destroy)
 		# "delegated_pools"=>{"1"=>"delegated", "2"=>"wished", "3"=>"delegated"}
-		@delegations = params[:delegated_pools].map { |pool_id, d_kind|
+		delegations = params[:delegated_pools].map{|pool_id, d_kind|
 				pool = Pool.find(pool_id.to_i)
 				pool_epoch = pool.pool_epochs.where('epoch = ?', @epoch).first
 		
 				@user.pool_epochs.push(pool_epoch)
 				delegation = @user.delegations.where('pool_epoch_id = ?', pool_epoch.id).first
-				
+
 				delegation.kind = d_kind
 				delegation
 		}
+		@actual_delegations = delegations.select {|d| d.kind != 'wished'}
+		@wished_delegations = delegations.select {|d| d.kind == 'wished'}
 
 		erb :'delegations/edit'
+	end
+
+	patch '/users/:slug' do
+		raise "#{params}"
 	end
 
 	get '/login' do

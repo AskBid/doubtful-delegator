@@ -1,3 +1,67 @@
-<% @delegations.each do |d| %>
-	<%= d.pool_epoch.pool.ticker %>
+<% if flash.has?(:message) %>
+  <p class='flash'><%= flash[:message] %> Do you want to <a href='/logout'>Log Out</a> ?</p>
 <% end %>
+
+User:
+<h1><b> <%= @user.username %> </b> </h1>
+ADA balance:
+<form action='/users/<%= @user.slug %>' method='post'>
+	<input id="hidden" type="hidden" name="_method" value="patch">
+<h2><input type='text' name='user[balance]' value='<%= @user.balance %>' id='balance'> </h2>
+
+<h3> select the amount of ADA to delegate to your delegations: </h3>
+
+<input type='submit' value='Submit Changes'>
+
+
+<% subtitle = ['Actual Delegations:', 'Wished Delegations:'] %>
+<% [@actual_delegations, @wished_delegations].each_with_index do |delegation_type, i| %>
+  <br>
+	<h2> <%= subtitle[i] %> </h2>
+	<% delegation_type.each do |d| %>
+		<div class='pool_label'>
+			<p class='ticker'>[
+				<a href="https://pooltool.io/pool/<%= d.pool_epoch.pool.address %>/history">
+					<%= d.pool_epoch.pool.ticker %>
+				</a>]</p>
+			<p class='name'><%= d.pool_epoch.pool.name %></p>
+
+			<div class='check'>
+				<label for='delegated' style='color: #cc2222; '>ADA delegated:</label>
+				<!-- hidden input wasn't working because of the patch hidden input
+				used a <b> tag instead -->
+				<b type='none' name='delegations[][<%= d.id %>]' value='<%= d.id %>' id='different'></b>
+				<input type="range" 
+					name='delegations[][<%= d.id %>][amount]' 
+					min="0" max="1" step='0.1'
+					value="<%= 1/delegation_type.size %>" 
+					class="slider" 
+					id="myRange"
+				>
+			</div>
+
+			<label for='blocks'>Blocks:</label>
+			<p class='attributes' id='blocks'> 
+				<%= d.pool_epoch.blocks %> </p>
+			<br>
+
+			<label for='staker_reward'>Staker Reward:</label>
+			<p class='attributes' id='staker_reward'> 
+				<%= d.pool_epoch.staker_reward %> </p>
+			<br>
+
+			<label for='total_stake'>TOT Stake:</label>
+			<p class='attributes' id='total_stake'> 
+				<%= d.pool_epoch.total_stake %> </p>
+			<br>
+
+			<label for='ROS'>ROS:</label>
+			<p class='attributes' id='ROS'> 
+				<%= ((d.pool_epoch.staker_reward.to_f/d.pool_epoch.total_stake.to_f)*1000).to_s[0..4] %> </p>
+			<br>
+		</div>
+	<% end %>
+	<br>
+	<br>
+<% end %>
+</form>
