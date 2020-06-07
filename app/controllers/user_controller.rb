@@ -78,17 +78,19 @@ class UserController < ApplicationController
 		@user = User.find_by_slug(params[:slug])
 		@user.update(params[:user])
 
-		params[:delegations].map{|delegetion_id, _params|
-			Delegation.find(delegetion_id.to_i).update(_params)
-		}
+		normalise_delegations(params[:delegations_actual]).each{|delegation_id, _params|
+			Delegation.find(delegation_id.to_i).update(_params)
+		} if params[:delegations_actual]
 
-		@actual_delegations = @user.delegations.select do |d| 
-			d.pool_epoch.epoch == @epoch && d.kind != 'wished'
+		normalise_delegations(params[:delegations_wished]).each{|delegation_id, _params|
+			Delegation.find(delegation_id.to_i).update(_params)
+		} if params[:delegations_wished]
+
+		if params[:delegations_actual]
+			@actual_delegations = Delegation.find(params[:delegations_actual].keys)
 		end
-		binding.pry
-
-		@wished_delegations = @user.delegations.select do |d| 
-			d.pool_epoch.epoch == @epoch && d.kind == 'wished'
+		if params[:delegations_wished]
+			@wished_delegations = Delegation.find(params[:delegations_wished].keys)
 		end
 
 		erb :'users/show'

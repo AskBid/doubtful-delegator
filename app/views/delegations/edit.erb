@@ -1,7 +1,8 @@
 <% if flash.has?(:message) %>
   <p class='flash'><%= flash[:message] %> Do you want to <a href='/logout'>Log Out</a> ?</p>
 <% end %>
-
+Epoch:
+<h3><%= @epoch %> </h3>
 User:
 <h1><b> <%= @user.username %> </b> </h1>
 ADA balance:
@@ -15,6 +16,7 @@ ADA balance:
 
 
 <% subtitle = ['Actual Delegations:', 'Wished Delegations:'] %>
+<% kind = ['actual', 'wished'] %>
 <% [@actual_delegations, @wished_delegations].each_with_index do |delegation_type, i| %>
   <br>
 	<h2> <%= subtitle[i] %> </h2>
@@ -30,11 +32,11 @@ ADA balance:
 				<label for='delegated' style='color: #cc2222; '>ADA delegated:</label>
 				<!-- hidden input wasn't working because of the patch hidden input
 				used a <b> tag instead -->
-				<b type='none' name='delegations[<%= d.id %>]' value='<%= d.id %>' id='different'></b>
+				<b type='none' name='delegations_<%= kind[i] %>[<%= d.id %>]' value='<%= d.id %>' id='different'></b>
 				<input type="range" 
-					name='delegations[<%= d.id %>][amount]' 
+					name='delegations_<%= kind[i] %>[<%= d.id %>][amount]' 
 					min="0" max="1" step='0.1'
-					value="<%= 1/delegation_type.size %>" 
+					value="<%= 1/delegation_type.size.to_f %>" 
 					class="slider" 
 					id="myRange"
 				>

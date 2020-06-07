@@ -29,6 +29,17 @@ class ApplicationController < Sinatra::Base
       PoolEpoch.maximum('epoch')
     end
 
+    def normalise_delegations(dele_params)
+      if dele_params
+        sum = dele_params.map{|k, v| v.values.first.to_f}.sum
+        multiplier = 1/sum
+        new_params = {}
+        dele_params.each{ |k, v| 
+          new_params[k] = {"amount"=>"#{v.values.first.to_f * multiplier}"}
+        }
+        new_params
+      end
+    end
     # # create an authorization helper for edit/delete
     # def authorized_to_edit?(post)
     #   post.user == current_user

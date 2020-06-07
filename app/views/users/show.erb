@@ -1,53 +1,62 @@
+Epoch:
+<h3><%= @epoch %> </h3>
+
 User:
 <h1><b> <%= @user.username %> </b> </h1>
 ADA balance:
 <h2> <%= @user.balance %> </h2>
 
+<% if @user.id == session[:user_id]%>
+	<a href='/users/<%= @user.slug %>/edit'> edit <%= @user.username %>'s delegations</a>
+<% end %>
 
 <% subtitle = ['Actual Delegations:', 'Wished Delegations:'] %>
 <% [@actual_delegations, @wished_delegations].each_with_index do |delegation_type, i| %>
   <br>
   <br>
 	<h2> <%= subtitle[i] %> </h2> 
-	<% delegation_type.each do |d| %>
-		<div class='pool_label'>
-			<p class='ticker'>[
-				<a href="https://pooltool.io/pool/<%= d.pool_epoch.pool.address %>/history">
-					<%= d.pool_epoch.pool.ticker %>
-				</a>]</p>
-			<p class='name'><%= d.pool_epoch.pool.name %></p>
+	<% if delegation_type %>
+		<% delegation_type.each do |d| %>
+			<div class='pool_label'>
+				<p class='ticker'>[
+					<a href="https://pooltool.io/pool/<%= d.pool_epoch.pool.address %>/history">
+						<%= d.pool_epoch.pool.ticker %>
+					</a>]</p>
+				<p class='name'><%= d.pool_epoch.pool.name %></p>
 
-			<div class='check'>
-				<label for='delegated' style='color: #cc2222'>ADA delegated:</label>
-				<p class='result flash' id='delegated'>
-					<%= d.amount %> ADA
-				</p>
-				<label for='profit' style='color: #cc2222'>Profit:</label>
-				<p class='result flash' id='profit'> 
-					<%= ((d.pool_epoch.staker_reward.to_f/d.pool_epoch.total_stake.to_f) * d.amount).to_i %> ADA
-				</p>
+				<div class='check'>
+					<label for='delegated' style='color: #cc2222'>ADA delegated:</label>
+					<p class='result flash' id='delegated'>
+						<% stake = d.amount * @user.balance %>
+						<%= stake.to_i %> ADA
+					</p>
+					<label for='profit' style='color: #cc2222'>Profit:</label>
+					<p class='result flash' id='profit'> 
+						<%= ((d.pool_epoch.staker_reward.to_f/d.pool_epoch.total_stake.to_f) * stake).to_i %> ADA
+					</p>
+				</div>
+
+				<label for='blocks'>Blocks:</label>
+				<p class='attributes' id='blocks'> 
+					<%= d.pool_epoch.blocks %> </p>
+				<br>
+
+				<label for='staker_reward'>Staker Reward:</label>
+				<p class='attributes' id='staker_reward'> 
+					<%= d.pool_epoch.staker_reward %> </p>
+				<br>
+
+				<label for='total_stake'>TOT Stake:</label>
+				<p class='attributes' id='total_stake'> 
+					<%= d.pool_epoch.total_stake %> </p>
+				<br>
+
+				<label for='ROS'>ROS:</label>
+				<p class='attributes' id='ROS'> 
+					<%= ((d.pool_epoch.staker_reward.to_f/d.pool_epoch.total_stake.to_f)*1000).to_s[0..4] %> </p>
+				<br>
+
 			</div>
-
-			<label for='blocks'>Blocks:</label>
-			<p class='attributes' id='blocks'> 
-				<%= d.pool_epoch.blocks %> </p>
-			<br>
-
-			<label for='staker_reward'>Staker Reward:</label>
-			<p class='attributes' id='staker_reward'> 
-				<%= d.pool_epoch.staker_reward %> </p>
-			<br>
-
-			<label for='total_stake'>TOT Stake:</label>
-			<p class='attributes' id='total_stake'> 
-				<%= d.pool_epoch.total_stake %> </p>
-			<br>
-
-			<label for='ROS'>ROS:</label>
-			<p class='attributes' id='ROS'> 
-				<%= ((d.pool_epoch.staker_reward.to_f/d.pool_epoch.total_stake.to_f)*1000).to_s[0..4] %> </p>
-			<br>
-
-		</div>
+		<% end %>
 	<% end %>
 <% end %>
