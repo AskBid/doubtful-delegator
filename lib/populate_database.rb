@@ -23,24 +23,25 @@ class Populate
 					name: pool_hash[:name],
 					address: pool_hash[:address]
 		) if !pool
-		print "#{pool.ticker} << "
+		puts "#{pool.ticker} << ".colorize(:yellow)
 		pool
 	end
 
 	def create_or_update_epoch(pool, epoch, hash)
-		p_epochs = PoolEpoch.find_by(epoch: epoch)
-		if p_epochs.class.to_s == 'Array' && p_epochs
-			p_epoch = p_epochs.select{|pe| pe.pool.address == pool.address} if p_epochs
-		elsif  p_epochs
-			p_epoch = p_epochs.pool.address == pool.address ? p_epochs : nil
+		p_epochs = PoolEpoch.where('epoch = ?', epoch)
+		binding.pry
+		if p_epochs
+			binding.pry
+			p_epoch = p_epochs.select{|pe| pe.pool.address == pool.address}.first
 		end
+		binding.pry if !p_epoch 
 		if !p_epoch
 			p_epoch = PoolEpoch.create(hash)
 			pool.pool_epochs << p_epoch
-			puts "#{p_epoch.epoch} pool epoch CREATED."
+			puts "#{p_epoch.epoch} pool epoch CREATED.".colorize(:blue)
 		else
 			p_epoch.update(hash)
-			puts "#{p_epoch.epoch} pool epoch UPDATED."
+			puts "#{p_epoch.epoch} pool epoch UPDATED.".colorize(:light_blue)
 		end
 		p_epoch
 	end
