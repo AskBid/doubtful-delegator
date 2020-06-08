@@ -11,6 +11,8 @@ class PopulateController
     puts "------------------------------------------------------------".colorize(:light_blue)
     puts ""
     puts ""
+
+    main_menu
   end
 
   def main_menu
@@ -73,6 +75,9 @@ class PopulateController
   end
 
   def adapools_update
+  end
+
+  def clear_db
   end
 
 end
