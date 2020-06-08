@@ -4,7 +4,6 @@ class CreatePoolEpoches < ActiveRecord::Migration
     	t.float   :pool_size
     	t.integer :total_stake
     	t.integer :staker_reward
-    	t.integer :pool_reward
     	t.integer :epoch
     	t.integer :blocks
     	t.float   :tax
