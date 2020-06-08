@@ -22,12 +22,12 @@ class PopulateController
     puts ""
 
     print "1: ".colorize(:light_yellow)
-    puts "Update DB from .json".colorize(:yellow)
-
-    print "2: ".colorize(:light_yellow)
-    puts "Update DB from .html raw page".colorize(:yellow)
+    puts "Update DB from .json :: ALL records".colorize(:yellow)
 
     print "3: ".colorize(:light_yellow)
+    puts "Update DB from .json :: SELECT a record".colorize(:yellow)
+
+    print "4: ".colorize(:light_yellow)
     puts "Update DB from https://itn.adapools.org/".colorize(:yellow)
 
     print "8: ".colorize(:light_yellow)
@@ -38,12 +38,12 @@ class PopulateController
 
     case action
       when '1'
-        json_update
+        json_update('all')
+        main_menu      
+      when '3'
+        json_update('call')
         main_menu
-      when '2'
-        html_update
-        main_menu
-      when '2'
+      when '4'
         adapools_update
         main_menu
 
@@ -59,25 +59,47 @@ class PopulateController
     end
   end
 
-  def json_update
+  def json_update(all_or_call)
     puts "type the .json file path:".colorize(:light_yellow)
     file_path = gets.strip
     file = File.read(file_path)
-    hash_of_days = JSON.parse(file)
+    hash_of_records = JSON.parse(file)
 
-    hash_of_days.each {|key, array_of_pools|
-      puts "populating DB with: #{key}"
-      Populate.new(array_of_pools)
-    }
+    if all_or_call == 'all'
+      hash_of_records.each {|key, array_of_pools|
+        puts "day #{key}...".colorize(:magenta)
+        puts "populating DB...".colorize(:magenta)
+        Populate.new(array_of_pools)
+      }
+    else
+      loop_menu(hash_of_records)
+    end
+    puts "population ended sucessfully.".colorize(:magenta)
   end
 
-  def html_update
+  def loop_menu(hash_of_records)
+      puts "Enter the key of the record you want to use to populate...".colorize(:light_yellow)
+      puts 'Or enter "..." to list all possible records.'.colorize(:light_yellow)
+      puts 'Or enter "q" quit command.'.colorize(:light_yellow)
+      entry = gets.strip
+      if entry == '...'
+        hash_of_records.each {|key, array_of_pools| puts key}
+        loop_menu(hash_of_records)
+      elsif entry == 'q'
+        nil
+      else
+        Populate.new(hash_of_records["#{entry}"])
+      end
   end
 
   def adapools_update
-  end
-
-  def clear_db
+    puts "scraping web...".colorize(:magenta)
+    scrape = ScraperAdapool.new
+    puts "scraping successful.".colorize(:magenta)
+    puts "...".colorize(:magenta)
+    puts "populating DB...".colorize(:magenta)
+    Populate.new(scrape.get_data)
+    puts "population ended sucessfully.".colorize(:magenta)
   end
 
 end
