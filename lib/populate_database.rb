@@ -5,7 +5,7 @@ class Populate
 	end
 
 	def populate_db
-		array.each {|pool_hash|
+		@array.each {|pool_hash|
 			if !(pool_hash[:ticker] == 'n/a')
 				pool = find_create_pool(pool_hash)
 				epoch = pool_hash[:last_epoch]
@@ -17,11 +17,12 @@ class Populate
 
 	def find_create_pool(hash)
 		pool = Pool.find_by(address: pool_hash[:address])
-				pool = Pool.create(
+		pool = Pool.create(
 					ticker: pool_hash[:ticker],
 					name: pool_hash[:name],
 					address: pool_hash[:address]
 		) if !pool
+		print "#{pool.ticker} << "
 	end
 
 	def create_or_update_epoch(pool, epoch, hash)
@@ -31,8 +32,10 @@ class Populate
 		if !p_epoch
 			p_epoch = PoolEpoch.create(split_hash(hash))
 			pool.pool_epochs << p_epoch
+			puts "#{p_epoch.epoch} pool epoch CREATED."
 		else
 			p_epoch.update(split_hash(hash))
+			puts "#{p_epoch.epoch} pool epoch UPDATED."
 		end
 		p_epoch
 	end

@@ -11,6 +11,7 @@ class PopulateController
     puts "------------------------------------------------------------".colorize(:light_blue)
     puts ""
     puts ""
+  end
 
   def main_menu
     puts ""
@@ -43,7 +44,7 @@ class PopulateController
       when '2'
         adapools_update
         main_menu
-        
+
       when '8'
         puts "--------------------------------------".colorize(:light_blue)
         puts "!!!                                !!!".colorize(:light_blue)
@@ -57,6 +58,15 @@ class PopulateController
   end
 
   def json_update
+    puts "type the .json file path:".colorize(:light_yellow)
+    file_path = gets.strip
+    file = File.read(file_path)
+    hash_of_days = JSON.parse(file)
+
+    hash_of_days.each {|key, array_of_pools|
+      puts "populating DB with: #{key}"
+      Populate.new(array_of_pools)
+    }
   end
 
   def html_update
@@ -64,4 +74,5 @@ class PopulateController
 
   def adapools_update
   end
+
 end
