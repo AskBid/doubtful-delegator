@@ -13,10 +13,20 @@ class ScraperAdapool
   end
 
   def get_data
+    max = get_max
     pool_rows.map { |row|
-      puts row.css('td').text
-      populate_hash_with_row(row)
-    }
+      if ticker_from_row(row) != 'n/a' && last_epoch_from_row(row) >= max
+        puts row.css('td').text
+        populate_hash_with_row(row)
+      end 
+    }.select{|row| row != nil}
+  end
+
+  def get_max
+    last_epochs = pool_rows.map { |row|
+      last_epoch_from_row(row)
+    } 
+    last_epochs.max
   end
 
   def table_headers_changed?

@@ -29,12 +29,9 @@ class Populate
 
 	def create_or_update_epoch(pool, epoch, hash)
 		p_epochs = PoolEpoch.where('epoch = ?', epoch)
-		binding.pry
 		if p_epochs
-			binding.pry
 			p_epoch = p_epochs.select{|pe| pe.pool.address == pool.address}.first
 		end
-		binding.pry if !p_epoch 
 		if !p_epoch
 			p_epoch = PoolEpoch.create(hash)
 			pool.pool_epochs << p_epoch
