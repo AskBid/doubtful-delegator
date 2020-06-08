@@ -14,6 +14,7 @@ gem 'tux'
 gem 'httparty'
 gem 'watir'
 gem 'rack-flash3'
+gem 'colorize'
 
 group :test do
   gem 'rspec'
