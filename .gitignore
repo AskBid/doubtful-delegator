@@ -4,3 +4,4 @@ dd-data.json
 /*.html
 data.json
 data_simple.json
+*.sqlite

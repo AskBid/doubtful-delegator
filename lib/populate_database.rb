@@ -28,14 +28,14 @@ class Populate
 	end
 
 	def create_or_update_epoch(pool, epoch, hash)
-		p_epochs = PoolEpoch.where('epoch = ?', epoch)
-		if p_epochs
-			p_epoch = p_epochs.select{|pe| pe.pool.address == pool.address}.first
-		end
+		p_epoch = PoolEpoch.where('epoch = ?', epoch)
+											 .joins(:pool)
+											 .where('pools.address = ?', pool.address)
+											 .first
 		if !p_epoch
-			p_epoch = PoolEpoch.create(hash)
-			pool.pool_epochs << p_epoch
-			puts "#{p_epoch.epoch} pool epoch CREATED.".colorize(:blue)
+			pool.pool_epochs.build(hash)
+			pool.save
+			puts "#{pool.pool_epochs.last.epoch} pool epoch CREATED.".colorize(:blue)
 		else
 			p_epoch.update(hash)
 			puts "#{p_epoch.epoch} pool epoch UPDATED.".colorize(:light_blue)
