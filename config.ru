@@ -6,6 +6,6 @@ end
 use Rack::MethodOverride
 
 run ApplicationController
-use DelegationsController
+use UserDelegationsController
 use PoolController
 use UserController

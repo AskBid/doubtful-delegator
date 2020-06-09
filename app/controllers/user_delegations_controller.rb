@@ -1,4 +1,4 @@
-class DelegationsController < ApplicationController
+class UserDelegationsController < ApplicationController
   # use Rack::Flash
 
 
