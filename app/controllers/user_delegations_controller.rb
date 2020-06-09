@@ -1,7 +1,5 @@
 class UserDelegationsController < ApplicationController
   # use Rack::Flash
-
-
   get '/user/:slug/delegations/edit' do
     redirect '/login' if !logged_in?
     @epoch = current_epoch

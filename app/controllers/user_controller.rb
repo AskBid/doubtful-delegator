@@ -20,7 +20,7 @@ class UserController < ApplicationController
 	get '/users/:slug' do
 		@epoch = current_epoch
 		@user = User.find_by_slug(params[:slug])
-
+		binding.pry
 		@actual_delegations = @user.delegations.select do |d| 
 			d.pool_epoch.epoch == @epoch && d.kind != 'wished'
 		end
@@ -30,6 +30,17 @@ class UserController < ApplicationController
 		end
 
 		erb :'users/show'
+	end
+
+	get '/users/:slug/edit' do
+		redirect '/login' if !logged_in?
+		@user = User.find_by_slug(params[:slug])
+		if authorized_to_edit?(@user)
+			erb :'users/edit'
+		else
+			flash[:message] = "You tried to edit a User that is not you"
+			redirect :"/users/#{current_user.slug}/edit"
+		end
 	end
 
 	patch '/users/:slug' do
@@ -56,18 +67,6 @@ class UserController < ApplicationController
 			@user.destroy
 		end
 		redirect '/'
-	end
-
-	get '/users/:slug/edit' do
-		redirect '/login' if !logged_in?
-		@user = User.find_by_slug(params[:slug])
-		if authorized_to_edit?(@user)
-			erb :'users/edit'
-		else
-			flash[:message] = "You tried to edit a User that is not you"
-			redirect :"/users/#{current_user.slug}/edit"
-		end
-		
 	end
 
 	get '/login' do

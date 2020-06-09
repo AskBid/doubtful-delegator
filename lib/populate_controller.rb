@@ -30,6 +30,9 @@ class PopulateController
     print "4: ".colorize(:light_yellow)
     puts "Update DB from https://itn.adapools.org/".colorize(:yellow)
 
+    print "5: ".colorize(:light_yellow)
+    puts "Seed_Users".colorize(:yellow)
+
     print "8: ".colorize(:light_yellow)
     puts "quit! (your job?)".colorize(:yellow)
     puts "...".colorize(:light_blue)
@@ -45,6 +48,9 @@ class PopulateController
         main_menu
       when '4'
         adapools_update
+        main_menu
+      when '5'
+        Seed.new
         main_menu
 
       when '8'
