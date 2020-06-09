@@ -12,7 +12,7 @@ balance:
 
 <form action='/delegations/users/<%= @user.slug %>' method='post'>
 
-	<input type="submit" name="EDIT" value='EDIT!' style='display: block; width:150px; height: 90px'>
+	<input type="submit" name="EDIT" value='CREATE SELECTED' style='display: block; width:150px; height: 90px'>
 	<br>
 	<% @pools.each do |p| %>
 		<div class='pool_label <%= 'select' if @actual_pools.include?(p.id) %>'>

@@ -1,5 +1,5 @@
 class DelegationsController < ApplicationController
-  use Rack::Flash
+  # use Rack::Flash
 
   get '/delegations/users/:slug/edit' do
     redirect '/login' if !logged_in?

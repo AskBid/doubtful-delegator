@@ -1,5 +1,5 @@
 class UserController < ApplicationController
-	use Rack::Flash
+	# use Rack::Flash
 
 	get '/signup' do
 		redirect("/users/#{current_user.slug}") if logged_in?
@@ -7,16 +7,12 @@ class UserController < ApplicationController
 	end
 
 	post '/signup' do
-		# raise "#{params}"
-		if User.find_by(username: params[:username])
-			flash[:message] = "The username already exist"
-			redirect '/signup'
-		end
-		user = User.new(params) if
+		user = User.new(params)
 		if user.save
 			session[:user_id] = user.id
 			redirect "/users/#{user.slug}"
 		else
+			flash[:message] = "The username already exist"
 			redirect '/signup'
 		end
 	end

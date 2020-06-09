@@ -37,6 +37,14 @@ div.check {
   white-space: normal;
 }
 
+div.results {
+  width: 100%;
+  background-color: #bcffff;
+  padding-bottom: 5px;
+  text-align: center;
+  white-space: normal;
+}
+
 p.attributes{  
   font-size: 12px;
   margin-bottom: 0px;

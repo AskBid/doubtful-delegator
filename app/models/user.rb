@@ -3,7 +3,8 @@ class User < ActiveRecord::Base
 	has_many(:delegations)
 	has_many(:pool_epochs, through: :delegations)
 
-	validates :email, :username, :password, :balance, presence: true
+	validates :email, :username, :password, :balance, presence: { message: "must be given please" }
+	validates_uniqueness_of :username
 
 	def slug
 		self.username.gsub(' ', '-')
