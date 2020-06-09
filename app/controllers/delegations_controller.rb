@@ -1,10 +1,12 @@
 class DelegationsController < ApplicationController
   # use Rack::Flash
 
-  get '/delegations/users/:slug/edit' do
+
+  get '/user/:slug/delegations/edit' do
     redirect '/login' if !logged_in?
     @epoch = current_epoch
     @user = User.find_by_slug(params[:slug])
+
     if authorized_to_edit?(@user)
       actual_delegations = @user.delegations.select do |d| 
         d.pool_epoch.epoch == @epoch && d.kind != 'wished'
@@ -25,15 +27,17 @@ class DelegationsController < ApplicationController
     else
       flash[:message] = "You cannot edit a User that isn't yours."
       user = current_user
-      redirect "/delegations/users/#{user.slug}/edit"
+      redirect "/user/#{user.slug}/delegations/edit"
     end
   end
 
-  post '/delegations/users/:slug' do
+  post '/user/:slug/delegations' do
     @epoch = current_epoch
     @user = User.find_by_slug(params[:slug])
+
     delegations_to_destroy = @user.delegations.select{|d| d.pool_epoch.epoch == @epoch}
     ids_to_destroy = delegations_to_destroy.map{|d| d.id }
+
     Delegation.destroy(ids_to_destroy)
     # "delegated_pools"=>{"1"=>"delegated", "2"=>"wished", "3"=>"delegated"}
     delegations = params[:delegated_pools].map{|pool_id, d_kind|
@@ -52,7 +56,7 @@ class DelegationsController < ApplicationController
     erb :'delegations/edit'
   end
 
-  patch '/delegations/users/:slug' do
+  patch '/user/:slug/delegations' do
     @epoch = current_epoch
     @user = User.find_by_slug(params[:slug])
 
@@ -72,8 +76,5 @@ class DelegationsController < ApplicationController
     end
 
     erb :'users/show'
-  end
-
-  delete "/delegations/users/:slug/delete" do
   end
 end
