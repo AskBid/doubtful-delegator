@@ -25,44 +25,51 @@ class Seed
     u1.pool_epochs = PoolEpoch.where('epoch <= ? AND epoch >= ? AND pool_id = ?', max_ep, min_ep, 2)
     u1.delegations.each {|d| 
       d.kind = 'wished'
-      d.amount = u1.balance
+      d.amount = 1
+      d.save
     }
-    u1.pool_epochs = PoolEpoch.where('epoch <= ? AND epoch >= ? AND pool_id = ?', max_ep, min_ep, 1)
-    u1.delegations.each {|d| 
-      d.amount = u1.balance
+    u1.pool_epochs << PoolEpoch.where('epoch <= ? AND epoch >= ? AND pool_id = ?', max_ep, min_ep, 1)
+    u1.delegations.joins(:pool_epoch).where('pool_id = ?', 1).each {|d| 
+      d.amount = 1
+      d.save
     }
-
 
     u2.pool_epochs = PoolEpoch.where('epoch <= ? AND epoch >= ? AND pool_id = ?', max_ep, min_ep, 3)
     u2.delegations.each {|d| 
       d.kind = 'wished'
-      d.amount = u2.balance
+      d.amount = 1
+      d.save
     }
-    u2.pool_epochs = PoolEpoch.where('epoch <= ? AND epoch >= ? AND pool_id = ?', max_ep, min_ep, 2)
-    u2.delegations.each {|d| 
-      d.amount = u2.balance
+    u2.pool_epochs << PoolEpoch.where('epoch <= ? AND epoch >= ? AND pool_id = ?', max_ep, min_ep, 2)
+    u2.delegations.joins(:pool_epoch).where('pool_id = ?', 2).each {|d| 
+      d.amount = 1
+      d.save
     }
 
 
     u3.pool_epochs = PoolEpoch.where('epoch <= ? AND epoch >= ? AND pool_id = ?', max_ep, min_ep, 1)
     u3.delegations.each {|d| 
       d.kind = 'wished'
-      d.amount = u3.balance
+      d.amount = 1
+      d.save
     }
-    u3.pool_epochs = PoolEpoch.where('epoch <= ? AND epoch >= ? AND pool_id = ?', max_ep, min_ep, 2)
-    u3.delegations.each {|d| 
-      d.amount = u3.balance
+    u3.pool_epochs << PoolEpoch.where('epoch <= ? AND epoch >= ? AND pool_id = ?', max_ep, min_ep, 2)
+    u3.delegations.joins(:pool_epoch).where('pool_id = ?', 2).each {|d| 
+      d.amount = 1
+      d.save
     }
 
 
     u4.pool_epochs = PoolEpoch.where('epoch <= ? AND epoch >= ? AND pool_id = ?', max_ep, min_ep, 4)
     u4.delegations.each {|d| 
       d.kind = 'wished'
-      d.amount = u4.balance
+      d.amount = 1
+      d.save
     }
-    u4.pool_epochs = PoolEpoch.where('epoch <= ? AND epoch >= ? AND pool_id = ?', max_ep, min_ep, 5)
-    u4.delegations.each {|d| 
-      d.amount = u4.balance
+    u4.pool_epochs << PoolEpoch.where('epoch <= ? AND epoch >= ? AND pool_id = ?', max_ep, min_ep, 5)
+    u4.delegations.joins(:pool_epoch).where('pool_id = ?', 5).each {|d| 
+      d.amount = 1
+      d.save
     }
   end
 end
