@@ -1,18 +1,18 @@
 class Seed
   def initialize
-    u1 = User.create({username: 'sergio', email: 'uno@com.com', password: 'pw', balance: 10000})
+    u1 = User.create({username: 'sergio', email: 'uno@com.com', password: 'pw', balance: 1000000})
     if !u1.save
       u1 = User.find_by({username: 'sergio'})
     end
-    u2 = User.create({username: 'ada', email: 'uno@com.com', password: 'pw', balance: 5000})
+    u2 = User.create({username: 'ada', email: 'uno@com.com', password: 'pw', balance: 560000})
     if !u1.save
       u2 = User.find_by({username: 'ada'})
     end
-    u3 = User.create({username: 'jem', email: 'uno@com.com', password: 'pw', balance: 33000})
+    u3 = User.create({username: 'jem', email: 'uno@com.com', password: 'pw', balance: 3330000})
     if !u1.save
       u3 = User.find_by({username: 'jem'})
     end
-    u4 = User.create({username: 'mare', email: 'uno@com.com', password: 'pw', balance: 99000})
+    u4 = User.create({username: 'mare', email: 'uno@com.com', password: 'pw', balance: 990000})
     if !u1.save
       u4 = User.find_by({username: 'mare'})
     end
