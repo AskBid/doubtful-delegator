@@ -9,7 +9,7 @@ balance:
 <h2> <%= @user.balance %> ADA</h2>
 
 <h3> select the amount of ADA to delegate to your delegations: </h3>
-<form action='/delegations/users/<%= @user.slug %>' method='post'>
+<form action='/user/<%= @user.slug %>/delegations' method='post'>
 		<input id="hidden" type="hidden" name="_method" value="patch">
 
 <input type='submit' value='Submit Changes'>

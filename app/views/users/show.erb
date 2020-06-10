@@ -9,7 +9,7 @@ ADA balance:
 <% if @user.id == session[:user_id]%>
 	<a href='/users/<%= @user.slug %>/edit'> edit <%= @user.username %> account</a>
 	<br>
-	<a href='/delegations/users/<%= @user.slug %>/edit'> edit <%= @user.username %>'s delegations</a>
+	<a href='/user/<%= @user.slug %>/delegations/edit'> edit <%= @user.username %>'s delegations</a>
 <% end %>
 
 <% subtitle = ['Actual Delegations:', 'Wished Delegations:'] %>

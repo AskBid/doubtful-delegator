@@ -10,7 +10,7 @@ balance:
 
 <h3> select your delegations: </h3>
 
-<form action='/delegations/users/<%= @user.slug %>' method='post'>
+<form action='/user/<%= @user.slug %>/delegations' method='post'>
 
 	<input type="submit" name="EDIT" value='CREATE SELECTED' style='display: block; width:150px; height: 90px'>
 	<br>
@@ -20,46 +20,49 @@ balance:
 				<a href="https://pooltool.io/pool/<%= p.address %>/history"><%= p.ticker %></a>
 			]</p>
 			<p class='name'><%= p.name %></p>
-		
-		<div class='check'>
-			<label for='<%= p.id %>_delegate'>Delegate</label>
-			<input type='radio' name='delegated_pools[<%= p.id %>]'
-				value='delegated'
-				id='<%= p.id %>_delegate'
-				<%= 'checked' if @actual_pools.include?(p.id) %>
-			>
 
-			<label for='<%= p.id %>_delegate'>Wished</label>
-			<input type='radio' name='delegated_pools[<%= p.id %>]' 
-				value='wished' 
-				id='<%= p.id %>_wished' 
-				<%= 'checked' if @wished_pools.include?(p.id) %>
-			> 
-		</div>
-			
-			<% pool_last_epoch = @pool_epochs.find {|e| e.pool.id == p.id} %>
-			<% total_stake = pool_last_epoch.total_stake %>
-			<% staker_reward = pool_last_epoch.staker_reward %>
+		<% pool_last_epoch = @pool_epochs.find {|e| e.pool.id == p.id} %>
+		<% if pool_last_epoch %>
+			<div class='check'>
+				<label for='<%= p.id %>_delegate'>Delegate</label>
+				<input type='radio' name='delegated_pools[<%= p.id %>]'
+					value='delegated'
+					id='<%= p.id %>_delegate'
+					<%= 'checked' if @actual_pools.include?(p.id) %>
+				>
 
-			<label for='blocks'>Blocks:</label>
-			<p class='attributes' id='blocks'> 
-				<%= pool_last_epoch.blocks %> </p>
-			<br>
+				<label for='<%= p.id %>_delegate'>Wished</label>
+				<input type='radio' name='delegated_pools[<%= p.id %>]' 
+					value='wished' 
+					id='<%= p.id %>_wished' 
+					<%= 'checked' if @wished_pools.include?(p.id) %>
+				> 
+			</div>
+				<% total_stake = pool_last_epoch.total_stake %>
+				<% staker_reward = pool_last_epoch.staker_reward %>
 
-			<label for='staker_reward'>Staker Reward:</label>
-			<p class='attributes' id='staker_reward'> 
-				<%= staker_reward %> </p>
-			<br>
+				<label for='blocks'>Blocks:</label>
+				<p class='attributes' id='blocks'> 
+					<%= pool_last_epoch.blocks %> </p>
+				<br>
 
-			<label for='total_stake'>TOT Stake:</label>
-			<p class='attributes' id='total_stake'> 
-				<%= total_stake %> </p>
-			<br>
+				<label for='staker_reward'>Staker Reward:</label>
+				<p class='attributes' id='staker_reward'> 
+					<%= staker_reward %> </p>
+				<br>
 
-			<label for='ROS'>ROS:</label>
-			<p class='attributes' id='ROS'> 
-				<%= ((staker_reward.to_f/total_stake.to_f)*1000).to_s[0..4] %> </p>
-			<br>
+				<label for='total_stake'>TOT Stake:</label>
+				<p class='attributes' id='total_stake'> 
+					<%= total_stake %> </p>
+				<br>
+
+				<label for='ROS'>ROS:</label>
+				<p class='attributes' id='ROS'> 
+					<%= ((staker_reward.to_f/total_stake.to_f)*1000).to_s[0..4] %> </p>
+				<br>
+			<% else %>
+				<label for='blocks'>NO epochs</label>
+			<% end %>
 
 		</div>
 	<% end %>
