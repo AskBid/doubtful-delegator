@@ -21,12 +21,12 @@ class UserController < ApplicationController
 	get '/users/:slug' do
 		@epoch = current_epoch
 		@user = User.find_by_slug(params[:slug])
-
+		binding.pry
 		@actual_delegations = @user.delegations.joins(:pool_epoch)
-			.where('kind != ? AND epoch = ?', 'delegated', @epoch)
+			.where('kind = ? AND epoch = ?', 'delegated', @epoch)
 
 		@wished_delegations =  @user.delegations.joins(:pool_epoch)
-			.where('kind != ? AND epoch = ?', 'wished', @epoch)
+			.where('kind = ? AND epoch = ?', 'wished', @epoch)
 
 		erb :'users/show'
 	end
@@ -48,10 +48,10 @@ class UserController < ApplicationController
 		@user.update(params[:user])
 
 		@actual_delegations = @user.delegations.joins(:pool_epoch)
-			.where('kind != ? AND epoch = ?', 'delegated', @epoch)
+			.where('kind = ? AND epoch = ?', 'delegated', @epoch)
 
 		@wished_delegations =  @user.delegations.joins(:pool_epoch)
-			.where('kind != ? AND epoch = ?', 'wished', @epoch)
+			.where('kind = ? AND epoch = ?', 'wished', @epoch)
 
 		erb :'users/show'
 	end
