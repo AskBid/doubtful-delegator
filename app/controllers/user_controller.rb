@@ -22,13 +22,11 @@ class UserController < ApplicationController
 		@epoch = current_epoch
 		@user = User.find_by_slug(params[:slug])
 
-		@actual_delegations = @user.delegations.select do |d| 
-			d.pool_epoch.epoch == @epoch && d.kind != 'wished'
-		end
+		@actual_delegations = @user.delegations.joins(:pool_epoch)
+			.where('kind != ? AND epoch = ?', 'delegated', @epoch)
 
-		@wished_delegations = @user.delegations.select do |d| 
-			d.pool_epoch.epoch == @epoch && d.kind == 'wished'
-		end
+		@wished_delegations =  @user.delegations.joins(:pool_epoch)
+			.where('kind != ? AND epoch = ?', 'wished', @epoch)
 
 		erb :'users/show'
 	end
@@ -49,13 +47,11 @@ class UserController < ApplicationController
 		@user = User.find_by_slug(params[:slug])
 		@user.update(params[:user])
 
-		@actual_delegations = @user.delegations.select do |d| 
-			d.pool_epoch.epoch == @epoch && d.kind != 'wished'
-		end
+		@actual_delegations = @user.delegations.joins(:pool_epoch)
+			.where('kind != ? AND epoch = ?', 'delegated', @epoch)
 
-		@wished_delegations = @user.delegations.select do |d| 
-			d.pool_epoch.epoch == @epoch && d.kind == 'wished'
-		end
+		@wished_delegations =  @user.delegations.joins(:pool_epoch)
+			.where('kind != ? AND epoch = ?', 'wished', @epoch)
 
 		erb :'users/show'
 	end
@@ -84,7 +80,6 @@ class UserController < ApplicationController
 
 		if @user && @user.authenticate(params[:password])
 			session[:user_id] = @user.id
-			# binding.pry
 			redirect :"/users/#{@user.slug}"
 		else
 			flash[:message] = "You tried to Log In with a User that doesn't exist"
