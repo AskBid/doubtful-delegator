@@ -7,3 +7,4 @@ data_daily.json
 data_hourly.json
 data_simple.json
 *.sqlite
+*.sqlite-journal
