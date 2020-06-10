@@ -12,7 +12,8 @@ class UserController < ApplicationController
 			session[:user_id] = user.id
 			redirect "/users/#{user.slug}"
 		else
-			flash[:message] = "The username already exist"
+			flash[:message] = user.errors.map {|k, m| m}
+			binding.pry
 			redirect '/signup'
 		end
 	end
@@ -20,7 +21,7 @@ class UserController < ApplicationController
 	get '/users/:slug' do
 		@epoch = current_epoch
 		@user = User.find_by_slug(params[:slug])
-		binding.pry
+
 		@actual_delegations = @user.delegations.select do |d| 
 			d.pool_epoch.epoch == @epoch && d.kind != 'wished'
 		end

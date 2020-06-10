@@ -1,10 +1,13 @@
 class User < ActiveRecord::Base
-	has_secure_password
+	has_secure_password validations: false
 	has_many(:delegations)
 	has_many(:pool_epochs, through: :delegations)
 
-	validates :email, :username, :password, :balance, presence: { message: "must be given please" }
-	validates_uniqueness_of :username
+	validates :email, presence: { message: "%{attribute} must be given" }
+	validates :username, presence: { message: "%{attribute} must be a number" }
+	validates :password, presence:  { message: "Password must be a given" }
+	validates :balance,  numericality: { message: "%{attribute} must be a number" }
+	validates_uniqueness_of :username, {message: "%{value} username already exist"}
 
 	def slug
 		self.username.gsub(' ', '-')

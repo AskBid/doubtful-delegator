@@ -17,6 +17,11 @@
     <div class="wrapper">
       <% if logged_in? %>
         <p style='text-align: right'><a href='/logout'>Log Out!</a></p>
+      <% else %>
+        <p style='text-align: right'>
+          <a href='/signup'>SignUp</a> or 
+          <a href='/login'>Log In</a>
+        </p>
       <% end %>
 
         <%= yield %>

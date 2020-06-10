@@ -2,7 +2,9 @@
 <p>[ <%= User.all.size %> users registered ]</p>
 <br>
 <% if flash.has?(:message) %>
-  <p class='flash'><%= flash[:message] %> Do you want to <a href='/login'>Log In</a> ?</p>
+  <% flash[:message].each do |message| %>
+    <p class='flash'><%= message %> </p>
+  <% end %>
 <% end %>
 <form action='/signup' method='post'>
 	<input type='text' name='username' id='username'>
