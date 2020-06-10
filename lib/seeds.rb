@@ -30,6 +30,7 @@ class Seed
     }
     u1.pool_epochs << PoolEpoch.where('epoch <= ? AND epoch >= ? AND pool_id = ?', max_ep, min_ep, 1)
     u1.delegations.joins(:pool_epoch).where('pool_id = ?', 1).each {|d| 
+      d.kind = 'delegated'
       d.amount = 1
       d.save
     }
@@ -42,6 +43,7 @@ class Seed
     }
     u2.pool_epochs << PoolEpoch.where('epoch <= ? AND epoch >= ? AND pool_id = ?', max_ep, min_ep, 2)
     u2.delegations.joins(:pool_epoch).where('pool_id = ?', 2).each {|d| 
+      d.kind = 'delegated'
       d.amount = 1
       d.save
     }
@@ -55,6 +57,7 @@ class Seed
     }
     u3.pool_epochs << PoolEpoch.where('epoch <= ? AND epoch >= ? AND pool_id = ?', max_ep, min_ep, 2)
     u3.delegations.joins(:pool_epoch).where('pool_id = ?', 2).each {|d| 
+      d.kind = 'delegated'
       d.amount = 1
       d.save
     }
@@ -68,6 +71,7 @@ class Seed
     }
     u4.pool_epochs << PoolEpoch.where('epoch <= ? AND epoch >= ? AND pool_id = ?', max_ep, min_ep, 5)
     u4.delegations.joins(:pool_epoch).where('pool_id = ?', 5).each {|d| 
+      d.kind = 'delegated'
       d.amount = 1
       d.save
     }
