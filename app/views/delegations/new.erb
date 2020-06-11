@@ -25,15 +25,15 @@ balance:
 		<% if pool_last_epoch %>
 			<div class='check'>
 				<label for='<%= p.id %>_delegate'>Delegate</label>
-				<input type='radio' name='delegated_pools[<%= p.id %>]'
-					value='delegated'
+				<input type='checkbox' name='delegated_pools[]'
+					value='<%= p.id %>'
 					id='<%= p.id %>_delegate'
 					<%= 'checked' if @delegated_pools.include?(p.id) %>
 				>
 
-				<label for='<%= p.id %>_delegate'>Wished</label>
-				<input type='radio' name='delegated_pools[<%= p.id %>]' 
-					value='wished' 
+				<label for='<%= p.id %>_wished'>Wished</label>
+				<input type='checkbox' name='wished_pools[]' 
+					value='<%= p.id %>'
 					id='<%= p.id %>_wished' 
 					<%= 'checked' if @wished_pools.include?(p.id) %>
 				> 
