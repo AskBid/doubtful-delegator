@@ -7,12 +7,12 @@ class UserDelegationsController < ApplicationController
 
     if authorized_to_edit?(@user)
 
-      @d_pool = Pool.joins(pool_epochs: [delegations: :user])
+      @d_pool_ids = Pool.joins(pool_epochs: [delegations: :user])
         .where('epoch = ? AND kind = ?', @epoch, 'delegated')
         .where('username = ?', @user.username)
         .ids
 
-      @w_pool = Pool.joins(pool_epochs: [delegations: :user])
+      @w_pool_ids = Pool.joins(pool_epochs: [delegations: :user])
         .where('epoch = ? AND kind = ?', @epoch, 'wished')
         .where('username = ?', @user.username)
         .ids
@@ -48,23 +48,16 @@ class UserDelegationsController < ApplicationController
       .where('users.id = ?', @user.id)
       .ids
 
-    delegations_to_destroy = @user.delegations.select{|d| d.pool_epoch.epoch == @epoch}
-    ids_to_destroy = delegations_to_destroy.map{|d| d.id }
+    d_pool_ids = d_pool_ids - current_d_pools_ids
+    w_pool_ids = w_pool_ids - current_w_pools_ids
 
-    binding.pry
-
-    Delegation.destroy(current_d_pools_ids - d_pool_ids)
-    # "delegated_pools"=>{"1"=>"delegated", "2"=>"wished", "3"=>"delegated"}
-    delegations = params[:delegated_pools].map{|pool_id, d_kind|
-        pool = Pool.find(pool_id.to_i)
-        pool_epoch = pool.pool_epochs.where('epoch = ?', @epoch).first
-    
-        @user.pool_epochs.push(pool_epoch)
-        delegation = @user.delegations.where('pool_epoch_id = ?', pool_epoch.id).first
-        delegation.kind = d_kind
-        delegation.save
-        delegation
+    @user.pool_epochs << d_pool_ids.map { |p_id| 
+      PoolEpoch.where('pool_id = ? AND epoch = ?', p_id, @epoch)
     }
+    @user.pool_epochs << w_pool_ids.map { |p_id| 
+      PoolEpoch.where('pool_id = ? AND epoch = ?', p_id, @epoch)
+    }
+
     @actual_delegations = delegations.select {|d| d.kind != 'wished'}
     @wished_delegations = delegations.select {|d| d.kind == 'wished'}
 
