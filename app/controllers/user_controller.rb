@@ -13,7 +13,6 @@ class UserController < ApplicationController
 			redirect "/users/#{user.slug}"
 		else
 			flash[:message] = user.errors.map {|k, m| m}
-			binding.pry
 			redirect '/signup'
 		end
 	end
@@ -21,7 +20,7 @@ class UserController < ApplicationController
 	get '/users/:slug' do
 		@epoch = current_epoch
 		@user = User.find_by_slug(params[:slug])
-		binding.pry
+
 		@actual_delegations = @user.delegations.joins(:pool_epoch)
 			.where('kind = ? AND epoch = ?', 'delegated', @epoch)
 

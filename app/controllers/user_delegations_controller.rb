@@ -1,21 +1,28 @@
 class UserDelegationsController < ApplicationController
-  # use Rack::Flash
+  
   get '/user/:slug/delegations/edit' do
     redirect '/login' if !logged_in?
     @epoch = current_epoch
     @user = User.find_by_slug(params[:slug])
 
     if authorized_to_edit?(@user)
-      actual_delegations = @user.delegations.select do |d| 
-        d.pool_epoch.epoch == @epoch && d.kind != 'wished'
-      end
+      # actual_delegations = @user.delegations.joins(:pool_epoch)
+      #   .where('kind = ? AND epoch = ?', 'delegated', @epoch)
 
-      wished_delegations = @user.delegations.select do |d| 
-        d.pool_epoch.epoch == @epoch && d.kind == 'wished'
-      end
+      # wished_delegations =  @user.delegations.joins(:pool_epoch)
+      #   .where('kind = ? AND epoch = ?', 'wished', @epoch)
 
-      @actual_pools = actual_delegations.map {|d| d.pool_epoch.pool.id}
-      @wished_pools = wished_delegations.map {|d| d.pool_epoch.pool.id}
+      # @actual_pools = actual_delegations.map {|d| d.pool_epoch.pool.id}
+      # @wished_pools = wished_delegations.map {|d| d.pool_epoch.pool.id}
+      @delegated_pools = Pool.joins(pool_epochs: [delegations: :user])
+        .where('epoch = ? AND kind = ?', @epoch, 'delegated')
+        .where('username = ?', @user.username)
+        .ids
+        
+      @wished_pools = Pool.joins(pool_epochs: [delegations: :user])
+        .where('epoch = ? AND kind = ?', @epoch, 'wished')
+        .where('username = ?', @user.username)
+        .ids
 
       @pool_epochs = PoolEpoch.where('epoch = ?', @epoch)
 
