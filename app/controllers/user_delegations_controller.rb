@@ -36,30 +36,23 @@ class UserDelegationsController < ApplicationController
     d_pool_ids = params[:delegated_pools].map{|s| s.to_i}
     w_pool_ids = params[:wished_pools].map{|s| s.to_i}
 
-    current_d_pools_ids = 
-      Pool.joins(pool_epochs: [delegations: :user])
-      .where('epoch = ? AND kind = ?', @epoch, 'delegated')
-      .where('users.id = ?', @user.id)
-      .ids
-
-    current_w_pools_ids = 
-      Pool.joins(pool_epochs: [delegations: :user])
-      .where('epoch = ? AND kind = ?', @epoch, 'wished')
-      .where('users.id = ?', @user.id)
-      .ids
-
-    d_pool_ids = d_pool_ids - current_d_pools_ids
-    w_pool_ids = w_pool_ids - current_w_pools_ids
-
-    @user.pool_epochs << d_pool_ids.map { |p_id| 
-      PoolEpoch.where('pool_id = ? AND epoch = ?', p_id, @epoch)
+    d_pool_ids.each { |p_id| 
+      Delegation.create(
+        user_id: @user.id, 
+        pool_epoch_id: PoolEpoch.where('pool_id = ? AND epoch = ?', p_id, @epoch).ids.first, 
+        kind: 'delegated')
     }
-    @user.pool_epochs << w_pool_ids.map { |p_id| 
-      PoolEpoch.where('pool_id = ? AND epoch = ?', p_id, @epoch)
+    w_pool_ids.each { |p_id| 
+      Delegation.create(
+        user_id: @user.id, 
+        pool_epoch_id: PoolEpoch.where('pool_id = ? AND epoch = ?', p_id, @epoch).ids.first, 
+        kind: 'wished')
     }
 
-    @actual_delegations = delegations.select {|d| d.kind != 'wished'}
-    @wished_delegations = delegations.select {|d| d.kind == 'wished'}
+    @d_delegations = @user.delegations.joins(:pool_epoch)
+      .where('kind = ? AND epoch = ?', 'delegated', @epoch)
+    @w_delegations = @user.delegations.joins(:pool_epoch)
+      .where('kind = ? AND epoch = ?', 'wished', @epoch)
 
     erb :'delegations/edit'
   end

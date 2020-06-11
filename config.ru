@@ -7,5 +7,4 @@ use Rack::MethodOverride
 
 run ApplicationController
 use UserDelegationsController
-use PoolController
 use UserController

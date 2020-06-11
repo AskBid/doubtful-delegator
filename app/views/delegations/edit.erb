@@ -17,7 +17,7 @@ balance:
 
 <% subtitle = ['Actual Delegations:', 'Wished Delegations:'] %>
 <% kind = ['actual', 'wished'] %>
-<% [@actual_delegations, @wished_delegations].each_with_index do |delegation_type, i| %>
+<% [@d_delegations, @w_delegations].each_with_index do |delegation_type, i| %>
   <br>
 	<h2> <%= subtitle[i] %> </h2>
 	<% delegation_type.each do |d| %>
