@@ -21,10 +21,10 @@ class UserController < ApplicationController
 		@epoch = current_epoch
 		@user = User.find_by_slug(params[:slug])
 
-		@actual_delegations = @user.delegations.joins(:pool_epoch)
+		@d_delegations = @user.delegations.joins(:pool_epoch)
 			.where('kind = ? AND epoch = ?', 'delegated', @epoch)
 
-		@wished_delegations =  @user.delegations.joins(:pool_epoch)
+		@w_delegations = @user.delegations.joins(:pool_epoch)
 			.where('kind = ? AND epoch = ?', 'wished', @epoch)
 
 		erb :'users/show'

@@ -13,12 +13,12 @@ ADA balance:
 <% end %>
 
 <% subtitle = ['Actual Delegations:', 'Wished Delegations:'] %>
-<% [@actual_delegations, @wished_delegations].each_with_index do |delegation_type, i| %>
+<% [@d_delegations, @w_delegations].each_with_index do |delegations_type, i| %>
   <br>
   <br>
 	<h2> <%= subtitle[i] %> </h2> 
-	<% if delegation_type %>
-		<% delegation_type.each do |d| %>
+	<% if delegations_type %>
+		<% delegations_type.each do |d| %>
 			<div class='pool_label'>
 				<p class='ticker'>[
 					<a href="https://pooltool.io/pool/<%= d.pool_epoch.pool.address %>/history">

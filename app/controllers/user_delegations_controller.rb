@@ -6,20 +6,13 @@ class UserDelegationsController < ApplicationController
     @user = User.find_by_slug(params[:slug])
 
     if authorized_to_edit?(@user)
-      # actual_delegations = @user.delegations.joins(:pool_epoch)
-      #   .where('kind = ? AND epoch = ?', 'delegated', @epoch)
 
-      # wished_delegations =  @user.delegations.joins(:pool_epoch)
-      #   .where('kind = ? AND epoch = ?', 'wished', @epoch)
-
-      # @actual_pools = actual_delegations.map {|d| d.pool_epoch.pool.id}
-      # @wished_pools = wished_delegations.map {|d| d.pool_epoch.pool.id}
-      @delegated_pools = Pool.joins(pool_epochs: [delegations: :user])
+      @d_pool = Pool.joins(pool_epochs: [delegations: :user])
         .where('epoch = ? AND kind = ?', @epoch, 'delegated')
         .where('username = ?', @user.username)
         .ids
-        
-      @wished_pools = Pool.joins(pool_epochs: [delegations: :user])
+
+      @w_pool = Pool.joins(pool_epochs: [delegations: :user])
         .where('epoch = ? AND kind = ?', @epoch, 'wished')
         .where('username = ?', @user.username)
         .ids
@@ -40,10 +33,27 @@ class UserDelegationsController < ApplicationController
     @epoch = current_epoch
     @user = User.find_by_slug(params[:slug])
 
+    d_pool_ids = params[:delegated_pools].map{|s| s.to_i}
+    w_pool_ids = params[:wished_pools].map{|s| s.to_i}
+
+    current_d_pools_ids = 
+      Pool.joins(pool_epochs: [delegations: :user])
+      .where('epoch = ? AND kind = ?', @epoch, 'delegated')
+      .where('users.id = ?', @user.id)
+      .ids
+
+    current_w_pools_ids = 
+      Pool.joins(pool_epochs: [delegations: :user])
+      .where('epoch = ? AND kind = ?', @epoch, 'wished')
+      .where('users.id = ?', @user.id)
+      .ids
+
     delegations_to_destroy = @user.delegations.select{|d| d.pool_epoch.epoch == @epoch}
     ids_to_destroy = delegations_to_destroy.map{|d| d.id }
 
-    Delegation.destroy(ids_to_destroy)
+    binding.pry
+
+    Delegation.destroy(current_d_pools_ids - d_pool_ids)
     # "delegated_pools"=>{"1"=>"delegated", "2"=>"wished", "3"=>"delegated"}
     delegations = params[:delegated_pools].map{|pool_id, d_kind|
         pool = Pool.find(pool_id.to_i)

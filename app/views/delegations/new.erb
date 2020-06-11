@@ -15,7 +15,7 @@ balance:
 	<input type="submit" name="EDIT" value='CREATE SELECTED' style='display: block; width:150px; height: 90px'>
 	<br>
 	<% @pools.each do |p| %>
-		<div class='pool_label <%= 'select' if @delegated_pools.include?(p.id) %>'>
+		<div class='pool_label <%= 'select' if @d_pool_ids.include?(p.id) || @w_pool_ids.include?(p.id) %>'>
 			<p class='ticker'>[
 				<a href="https://pooltool.io/pool/<%= p.address %>/history"><%= p.ticker %></a>
 			]</p>
@@ -28,14 +28,14 @@ balance:
 				<input type='checkbox' name='delegated_pools[]'
 					value='<%= p.id %>'
 					id='<%= p.id %>_delegate'
-					<%= 'checked' if @delegated_pools.include?(p.id) %>
+					<%= 'checked' if @d_pool_ids.include?(p.id) %>
 				>
 
 				<label for='<%= p.id %>_wished'>Wished</label>
 				<input type='checkbox' name='wished_pools[]' 
 					value='<%= p.id %>'
 					id='<%= p.id %>_wished' 
-					<%= 'checked' if @wished_pools.include?(p.id) %>
+					<%= 'checked' if @w_pool_ids.include?(p.id) %>
 				> 
 			</div>
 				<% total_stake = pool_last_epoch.total_stake %>
