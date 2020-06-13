@@ -31,7 +31,7 @@ To support with the seeding of the databse and the simulation of the course of a
 
 	$ bin/update_db_cli
 
-just follow the messages in the terminal for usage.
+just follow the messages in the terminal for usage. I suggest to run option 1. (with file `db/concerns/data_daily.json`) and then option 5. to populate with some users. Use option 3. (with file `db/concerns/data_hourly.json`) to simulate the progress of an epoch.
 
 but first don't forget to migrate the database:
 
