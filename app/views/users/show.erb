@@ -1,3 +1,7 @@
+<% if flash.has?(:message) %>
+  <p class='flash'><%= flash[:message] %> ...</p>
+<% end %>
+
 Epoch:
 <h3><%= @epoch %> </h3>
 
