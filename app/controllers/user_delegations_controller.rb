@@ -30,8 +30,10 @@ class UserDelegationsController < ApplicationController
   end
 
   post '/user/:slug/delegations' do
+    redirect '/login' if !logged_in?
     @epoch = current_epoch
     @user = User.find_by_slug(params[:slug])
+    redirect '/users/:slug' if !authorized_to_edit?(@user)
 
     current_d_pool_epoch_ids = @user.pool_epochs
       .where('kind = ? AND epoch = ?', 'delegated', @epoch).ids
@@ -75,8 +77,13 @@ class UserDelegationsController < ApplicationController
   end
 
   patch '/user/:slug/delegations' do
+    redirect '/login' if !logged_in?
     @epoch = current_epoch
     @user = User.find_by_slug(params[:slug])
+    if !authorized_to_edit?(@user)
+      flash[:message] = "You cannot edit a User that isn't yours."
+      redirect "/users/#{current_user.slug}" 
+    end
 
     normalise_delegations(params[:delegations_actual]).each{|delegation_id, _params|
       Delegation.find(delegation_id.to_i).update(_params)
@@ -86,13 +93,6 @@ class UserDelegationsController < ApplicationController
       Delegation.find(delegation_id.to_i).update(_params)
     } if params[:delegations_wished]
 
-    if params[:delegations_actual]
-      @d_delegations = Delegation.find(params[:delegations_actual].keys)
-    end
-    if params[:delegations_wished]
-      @w_delegations = Delegation.find(params[:delegations_wished].keys)
-    end
-
-    erb :'users/show'
+    redirect :"users/#{params[:slug]}"
   end
 end
