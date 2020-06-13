@@ -1,6 +1,6 @@
 # Doubtful Delegator
 
-Track the performance of your delegations in the Cardano blockchain.
+Track the performance of your delegations in the [**Cardano**](https://www.cardano.org/) blockchain.
 
 Users can select a group of pools to which they have delegated and a group of Pools they want to track. 
 During the course of an epoch users can compare the performance of the actual delegations and the performance of "would be" delegations.
@@ -16,7 +16,7 @@ once in the project directory, install all the dependecies by executing:
 
 	$ bundle install
 
-If you wish to use the scraper that takes new data from the source https://itn.adapools.org/, you will need to install ChromeDriver as an headless browser is used to scrape data.
+If you wish to use the scraper that takes new data from the source [AdaPools](https://itn.adapools.org/), you will need to install ChromeDriver as an headless browser is used to scrape data.
 To install ChromeDriver on MacOS:
 
 	$ brew cask install chromedriver
@@ -39,4 +39,4 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/AskBid
 
 ## License
 
-The repository is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT
+The repository is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT)
