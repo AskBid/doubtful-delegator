@@ -1,5 +1,7 @@
 <% if flash.has?(:message) %>
-  <p class='flash'><%= flash[:message] %> ...</p>
+  <% flash[:message].each do |message| %>
+    <p class='flash'><%= message %> </p>
+  <% end %>
 <% end %>
 
 Epoch:

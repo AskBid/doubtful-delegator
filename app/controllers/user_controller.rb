@@ -46,13 +46,19 @@ class UserController < ApplicationController
 		@user = User.find_by_slug(params[:slug])
 		@user.update(params[:user])
 
-		@actual_delegations = @user.delegations.joins(:pool_epoch)
+		@d_delegations = @user.delegations.joins(:pool_epoch)
 			.where('kind = ? AND epoch = ?', 'delegated', @epoch)
 
-		@wished_delegations =  @user.delegations.joins(:pool_epoch)
+		@w_delegations =  @user.delegations.joins(:pool_epoch)
 			.where('kind = ? AND epoch = ?', 'wished', @epoch)
 
-		erb :'users/show'
+		if @user.save
+			erb :'users/show'
+		else
+			flash[:message] = @user.errors.map {|k, m| m}
+			redirect "/users/#{params[:slug]}/edit"
+		end
+		
 	end
 
 	delete '/users/:slug' do

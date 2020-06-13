@@ -1,7 +1,9 @@
 <h1>EDIT User Account</h1>
 <br>
 <% if flash.has?(:message) %>
-  <p class='flash'><%= flash[:message] %></p>
+  <% flash[:message].each do |message| %>
+    <p class='flash'><%= message %> </p>
+  <% end %>
 <% end %>
 <form action='/users/<%= @user.slug %>' method='post'>
   <input id="hidden" type="hidden" name="_method" value="patch">
