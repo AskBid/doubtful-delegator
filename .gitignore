@@ -1,10 +1,5 @@
 run_html.rb
 run_json.rb
-dd-data.json
 /*.html
-data.json
-data_daily.json
-data_hourly.json
-data_simple.json
 *.sqlite
 *.sqlite-journal

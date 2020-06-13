@@ -29,9 +29,13 @@ Or you can create you own database by using the `lib/scraper_adapool.rb`.
 
 To support with the seeding of the databse and the simulation of the course of an epoch by `db/concerns/data_hourly.json`, I created a CLI script to guide you through the options:
 
-    $ bin/update_db_cli
+	$ bin/update_db_cli
 
 just follow the messages in the terminal for usage.
+
+but first don't forget to migrate the database:
+
+	$ rake db:migrate
 
 ## Contributing
 
