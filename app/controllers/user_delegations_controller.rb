@@ -33,19 +33,36 @@ class UserDelegationsController < ApplicationController
     @epoch = current_epoch
     @user = User.find_by_slug(params[:slug])
 
-    d_pool_ids = params[:delegated_pools].map{|s| s.to_i}
-    w_pool_ids = params[:wished_pools].map{|s| s.to_i}
+    current_d_pool_epoch_ids = @user.pool_epochs
+      .where('kind = ? AND epoch = ?', 'delegated', @epoch).ids
 
-    d_pool_ids.each { |p_id| 
+    current_w_pool_epoch_ids = @user.pool_epochs
+      .where('kind = ? AND epoch = ?', 'wished', @epoch).ids
+
+    selected_d_pool_epoch_ids = 
+      PoolEpoch.where(pool_id: params[:delegated_pools].map{|s| s.to_i})
+        .where(epoch: @epoch)
+        .ids    
+    selected_w_pool_epoch_ids = 
+      PoolEpoch.where(pool_id: params[:wished_pools].map{|s| s.to_i})
+        .where(epoch: @epoch)
+        .ids
+
+    deselected_pool_epoch_ids = 
+      (current_d_pool_epoch_ids - selected_d_pool_epoch_ids) + 
+      (current_w_pool_epoch_ids - selected_w_pool_epoch_ids) 
+    Delegation.where(pool_epoch_id: deselected_pool_epoch_ids).delete_all
+
+    selected_d_pool_epoch_ids.each {|pool_epoch_id|
       Delegation.create(
-        user_id: @user.id, 
-        pool_epoch_id: PoolEpoch.where('pool_id = ? AND epoch = ?', p_id, @epoch).ids.first, 
+        user_id: @user.id,
+        pool_epoch_id: pool_epoch_id,
         kind: 'delegated')
     }
-    w_pool_ids.each { |p_id| 
+    selected_w_pool_epoch_ids.each {|pool_epoch_id|
       Delegation.create(
-        user_id: @user.id, 
-        pool_epoch_id: PoolEpoch.where('pool_id = ? AND epoch = ?', p_id, @epoch).ids.first, 
+        user_id: @user.id,
+        pool_epoch_id: pool_epoch_id,
         kind: 'wished')
     }
 
@@ -70,10 +87,10 @@ class UserDelegationsController < ApplicationController
     } if params[:delegations_wished]
 
     if params[:delegations_actual]
-      @actual_delegations = Delegation.find(params[:delegations_actual].keys)
+      @d_delegations = Delegation.find(params[:delegations_actual].keys)
     end
     if params[:delegations_wished]
-      @wished_delegations = Delegation.find(params[:delegations_wished].keys)
+      @w_delegations = Delegation.find(params[:delegations_wished].keys)
     end
 
     erb :'users/show'
