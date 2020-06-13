@@ -16,7 +16,7 @@
   <body>
     <div class="wrapper">
       <% if logged_in? %>
-        <p style='text-align: right'><a href='/logout'>Log Out!</a></p>
+        <p style='text-align: right'><a href='/users/<%= current_user.slug %>'>Dashboard</a> or <a href='/logout'>Log Out!</a></p>
       <% else %>
         <p style='text-align: right'>
           <a href='/signup'>SignUp</a> or 
