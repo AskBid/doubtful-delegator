@@ -44,7 +44,7 @@ ADA balance:
 					</p>
 					<label for='profit' style='color: #cc2222'>Profit:</label>
 					<p class='result flash' id='profit'> 
-						<%= ((d.pool_epoch.staker_reward.to_f/d.pool_epoch.total_stake.to_f) * stake).to_i %> ADA
+						<%= (((d.pool_epoch.blocks.to_f*1000)/d.pool_epoch.total_stake.to_f) * stake).to_i %> ADA
 					</p>
 				</div>
 
