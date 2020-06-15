@@ -19,4 +19,4 @@ Confirm
 - [x] You made the changes in a commit that relate to the commit message
 - [ ] You don't include changes in a commit that aren't related to the commit message
 
-I tried to be good with commits towards the end but initially I may have been to involved in trying to get things working to save commit consinstently and frequently.
+I tried to be good with commits towards the end. Initially I may have been too involved in trying to get things working and omitted to save commit consinstently and frequently.
